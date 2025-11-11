@@ -95,7 +95,7 @@ TIMESTAMP_IN_TIMEBAR = False  # shows timestamped comments in the timebar for vi
 ALLOW_MENTION_IN_COMMENTS = False  # allowing to mention other users with @ in the comments
 
 # valid options: content, author
-RELATED_MEDIA_STRATEGY = "content"
+RELATED_MEDIA_STRATEGY = "author"
 
 # Whether or not to generate a sitemap.xml listing the pages on the site (default: False)
 GENERATE_SITEMAP = False
