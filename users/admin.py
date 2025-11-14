@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib import admin
 
-from .models import User
+from .models import User, Channel
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -28,3 +28,17 @@ class UserAdmin(admin.ModelAdmin):
 
 
 admin.site.register(User, UserAdmin)
+
+
+@admin.register(Channel)
+class ChannelAdmin(admin.ModelAdmin):
+    list_display = [
+        'title',
+        'description',
+        'user',
+        'add_date',
+        'friendly_token'
+    ]
+    search_fields = ['title', 'user__username']
+    list_filter = ['add_date']
+    ordering = ('-add_date',)

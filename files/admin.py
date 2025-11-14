@@ -35,6 +35,7 @@ class MediaAdmin(admin.ModelAdmin):
     list_display = [
         "title",
         "user",
+        "channel",
         "add_date",
         "media_type",
         "duration",
@@ -46,7 +47,7 @@ class MediaAdmin(admin.ModelAdmin):
     ]
     list_filter = ["state", "is_reviewed", "encoding_status", "featured", "category"]
     ordering = ("-add_date",)
-    readonly_fields = ("user", "tags", "category", "channel")
+    readonly_fields = ("tags", "category",)
 
     def get_comments_count(self, obj):
         return obj.comments.count()
