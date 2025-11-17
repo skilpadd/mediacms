@@ -42,11 +42,12 @@ services:
       - web
   web:
     image: mediacms/mediacms-dev:latest
-    command: "python manage.py runserver 0.0.0.0:80"
+    command: "python -m debugpy --listen 0.0.0.0:5678 manage.py runserver 0.0.0.0:80"
     environment:
       DEVELOPMENT_MODE: True
     ports:
       - "80:80"
+      - "5678:5678"
     volumes:
       - ./:/home/mediacms.io/mediacms/
     depends_on:
