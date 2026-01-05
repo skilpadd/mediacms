@@ -274,6 +274,11 @@ class Channel(models.Model):
         else:
             return reverse("view_channel", kwargs={"friendly_token": self.friendly_token})
 
+    def get_banner_url(self):
+        if self.banner_logo:
+            return helpers.url_from_path(self.banner_logo.path)
+        return None
+
     @property
     def edit_url(self):
         return self.get_absolute_url(edit=True)

@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
-from .models import User
+from .models import User, Channel
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -131,3 +131,37 @@ class LoginSerializer(serializers.Serializer):
             token = Token.objects.create(user=user)
 
         return {'email': user.email, 'username': user.username, 'token': token.key}
+
+
+class ChannelSerializer(serializers.ModelSerializer):
+    url = serializers.SerializerMethodField()
+    api_url = serializers.SerializerMethodField()
+    banner_url = serializers.SerializerMethodField()
+    username = serializers.CharField(source='user.username', read_only=True)
+
+    def get_url(self, obj):
+        return self.context['request'].build_absolute_uri(obj.get_absolute_url())
+
+    def get_api_url(self, obj):
+        return self.context['request'].build_absolute_uri(obj.get_absolute_url())
+
+    def get_banner_url(self, obj):
+        return self.context['request'].build_absolute_uri(obj.get_banner_url())
+
+    def get_thumbnail_url(self, obj):
+        return self.context['request'].build_absolute_uri(obj.get_banner_url())
+
+    class Meta:
+        model = Channel
+        read_only_fields = [
+            'add_date',
+            'friendly_token',
+        ]
+        fields = [
+            'title',
+            'description',
+            'banner_url',
+            'url',
+            'api_url',
+            'username',
+        ]

@@ -40,4 +40,6 @@ urlpatterns = [
         views.contact_user,
         name="api_contact_user",
     ),
+    re_path(r'^api/v1/channels$', views.ChannelList.as_view(), name='api_channels'),
+    re_path(r'^api/v1/channels/$', views.ChannelList.as_view(), name='api_channels'),
 ]

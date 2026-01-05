@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage
 from django.db.models import Q
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from drf_yasg import openapi as openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics, permissions, status
@@ -25,7 +25,7 @@ from files.methods import is_mediacms_editor, is_mediacms_manager
 
 from .forms import ChannelForm, UserForm
 from .models import Channel, User
-from .serializers import LoginSerializer, UserDetailSerializer, UserSerializer
+from .serializers import LoginSerializer, UserDetailSerializer, UserSerializer, ChannelSerializer
 
 
 def get_user(username):
@@ -467,3 +467,35 @@ class LoginView(APIView):
         serializer.is_valid(raise_exception=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ChannelList(APIView):
+    parser_classes = (JSONParser, MultiPartParser, FormParser, FileUploadParser)
+
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter(name='page', type=openapi.TYPE_INTEGER, in_=openapi.IN_QUERY, description='Page number'),
+            openapi.Parameter(name='title', type=openapi.TYPE_STRING, in_=openapi.IN_QUERY, description='Search by title'),
+            openapi.Parameter(name='username', type=openapi.TYPE_STRING, in_=openapi.IN_QUERY, description='Search by username')
+        ],
+        operation_summary='List channels',
+        operation_description='Paginated listing of channels'
+    )
+    def get(self, request, format=None):
+        pagination_class = api_settings.DEFAULT_PAGINATION_CLASS
+        paginator = pagination_class()
+        channels = Channel.objects.filter()
+
+        title = request.GET.get('title', '').strip()
+        if title:
+            channels = channels.filter(title__icontains=title)
+
+        username = request.GET.get('username', '').strip()
+        if username:
+            user = get_object_or_404(User, username__iexact=username)
+            channels = channels.filter(user=user)
+
+        page = paginator.paginate_queryset(channels, request)
+
+        serializer = ChannelSerializer(page, many=True, context={'request': request})
+        return paginator.get_paginated_response(serializer.data)
