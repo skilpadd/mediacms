@@ -115,6 +115,18 @@ export function SidebarNavigationMenu() {
       });
     }
 
+    if (
+      PageStore.get('config-enabled').pages.members &&
+      PageStore.get('config-enabled').pages.members.enabled
+    ) {
+      items.push({
+        link: links.channels,
+        icon: 'subscriptions',
+        text: translateString("Channels"),
+        className: 'nav-item-channels',
+      });
+    }
+
     const extraItems = PageStore.get('config-contents').sidebar.mainMenuExtra.items;
 
     extraItems.forEach((navitem) => {

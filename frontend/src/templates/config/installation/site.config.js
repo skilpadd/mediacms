@@ -35,6 +35,9 @@ module.exports = {
     members: {
       title: 'Members',
     },
+    channels: {
+      title: 'Channels',
+    },
   },
   userPages: {
     liked: {

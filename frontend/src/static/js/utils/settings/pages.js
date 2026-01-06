@@ -18,6 +18,10 @@ export function init(settings) {
       enabled: false,
       title: 'Members',
     },
+    channels: {
+      enabled: false,
+      title: 'Channels',
+    },
     liked: {
       enabled: false,
       title: 'Liked media',
