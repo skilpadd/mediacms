@@ -627,6 +627,13 @@ def members(request):
     return render(request, "cms/members.html", context)
 
 
+def channels(request):
+    """List channels view"""
+
+    context = {}
+    return render(request, "cms/channels.html", context)
+
+
 def recommended_media(request):
     """List recommended media view"""
 

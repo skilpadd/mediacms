@@ -251,6 +251,18 @@ class Channel(models.Model):
         options={"quality": 85},
         blank=True,
     )
+    logo = ProcessedImageField(
+        upload_to="userlogos/%Y/%m/%d",
+        processors=[ResizeToFill(200, 200)],
+        default="userlogos/user.jpg",
+        format="JPEG",
+        options={"quality": 75},
+        blank=True,
+    )
+
+    class Meta:
+        ordering = ["-add_date", "friendly_token"]
+        indexes = [models.Index(fields=["-add_date", "friendly_token"])]
 
     def save(self, *args, **kwargs):
         strip_text_items = ["description", "title"]
@@ -277,6 +289,11 @@ class Channel(models.Model):
     def get_banner_url(self):
         if self.banner_logo:
             return helpers.url_from_path(self.banner_logo.path)
+        return None
+
+    def thumbnail_url(self):
+        if self.logo:
+            return helpers.url_from_path(self.logo.path)
         return None
 
     @property

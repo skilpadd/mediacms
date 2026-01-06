@@ -77,6 +77,7 @@ const PAGES = {
   featured: { id: 'featured', title: 'Featured', component: 'FeaturedMediaPage' },
   recommended: { id: 'recommended', title: 'Recommended', component: 'RecommendedMediaPage' },
   members: { id: 'members', title: 'Members', component: 'MembersPage' },
+  channels: { id: 'channels', title: 'Channels', component: 'ChannelsPage' },
   history: { id: 'history', title: 'History', component: 'HistoryPage' },
   liked: { id: 'liked', title: 'Liked media', component: 'LikedMediaPage' },
   tags: { id: 'tags', title: 'Tags', component: 'TagsPage' },

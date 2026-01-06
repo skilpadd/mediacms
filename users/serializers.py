@@ -137,7 +137,10 @@ class ChannelSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
     api_url = serializers.SerializerMethodField()
     banner_url = serializers.SerializerMethodField()
-    username = serializers.CharField(source='user.username', read_only=True)
+    thumbnail_url = serializers.SerializerMethodField()
+    author_name = serializers.CharField(source='user.username', read_only=True)
+    author_profile = serializers.SerializerMethodField()
+    media_type = serializers.SerializerMethodField()
 
     def get_url(self, obj):
         return self.context['request'].build_absolute_uri(obj.get_absolute_url())
@@ -149,19 +152,31 @@ class ChannelSerializer(serializers.ModelSerializer):
         return self.context['request'].build_absolute_uri(obj.get_banner_url())
 
     def get_thumbnail_url(self, obj):
-        return self.context['request'].build_absolute_uri(obj.get_banner_url())
+        return self.context['request'].build_absolute_uri(obj.thumbnail_url())
+
+    def get_author_profile(self, obj):
+        return self.context['request'].build_absolute_uri(obj.user.get_absolute_url())
+
+    def get_media_type(self, obj):
+        return 'image'
 
     class Meta:
         model = Channel
         read_only_fields = [
+            'author_name',
             'add_date',
             'friendly_token',
+            'author_profile',
         ]
         fields = [
             'title',
             'description',
             'banner_url',
+            'thumbnail_url',
             'url',
             'api_url',
-            'username',
+            'author_name',
+            'author_profile',
+            'add_date',
+            'media_type'
         ]

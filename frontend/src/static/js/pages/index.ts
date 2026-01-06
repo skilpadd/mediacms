@@ -10,6 +10,7 @@ export * from './ManageMediaPage';
 export * from './ManageUsersPage';
 export * from './MediaPage';
 export * from './MembersPage';
+export * from './ChannelsPage';
 export * from './PlaylistPage';
 export * from './ProfileAboutPage';
 export * from './ProfileMediaPage';
