@@ -14,6 +14,7 @@ export * from './ChannelsPage';
 export * from './PlaylistPage';
 export * from './ProfileAboutPage';
 export * from './ProfileMediaPage';
+export * from './ChannelMediaPage';
 export * from './ProfilePlaylistsPage';
 export * from './ProfileSharedByMePage';
 export * from './ProfileSharedWithMePage';

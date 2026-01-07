@@ -21,7 +21,7 @@ from rest_framework.views import APIView
 from actions.models import MediaAction
 from cms.custom_pagination import FastPaginationWithoutCount
 from cms.permissions import IsAuthorizedToAdd, IsUserOrEditor
-from users.models import User
+from users.models import User, Channel
 
 from .. import helpers
 from ..methods import (
@@ -57,6 +57,7 @@ class MediaList(APIView):
         manual_parameters=[
             openapi.Parameter(name='page', type=openapi.TYPE_INTEGER, in_=openapi.IN_QUERY, description='Page number'),
             openapi.Parameter(name='author', type=openapi.TYPE_STRING, in_=openapi.IN_QUERY, description='username'),
+            openapi.Parameter(name='channel', type=openapi.TYPE_STRING, in_=openapi.IN_QUERY, description='Channel token'),
             openapi.Parameter(name='show', type=openapi.TYPE_STRING, in_=openapi.IN_QUERY, description='show', enum=['recommended', 'featured', 'latest']),
         ],
         tags=['Media'],
@@ -105,6 +106,7 @@ class MediaList(APIView):
         params = self.request.query_params
         show_param = params.get("show", "")
         author_param = params.get("author", "").strip()
+        channel_param = params.get("channel", "").strip()
         tag = params.get("t", "").strip()
         ordering = params.get("ordering", "").strip()
         sort_by = params.get("sort_by", "").strip()
@@ -186,6 +188,29 @@ class MediaList(APIView):
                 media = Media.objects.filter(user=user).prefetch_related("user", "tags")
             else:
                 media = self._get_media_queryset(request, user)
+                already_sorted = True
+        elif channel_param:
+            channel = get_object_or_404(Channel, friendly_token=channel_param)
+            if self.request.user == channel.user or is_mediacms_editor(self.request.user):
+                media = Media.objects.filter(channel=channel).prefetch_related("user", "tags")
+            else:
+                base_queryset = Media.objects.prefetch_related("user", "tags")
+                base_filters = Q(listable=True)
+
+                if not request.user.is_authenticated:
+                    media = base_queryset.filter(base_filters)
+                else:
+                    conditions = base_filters
+                    permissions_filter = {'user': request.user}
+                    if MediaPermission.objects.filter(**permissions_filter).exists():
+                        conditions |= Q(permissions__user=request.user, channel=channel)
+
+                    if getattr(settings, 'USE_RBAC', False):
+                        rbac_categories = request.user.get_rbac_categories_as_member()
+                        conditions |= Q(category__in=rbac_categories, channel=channel)
+
+                    media = base_queryset.filter(conditions).distinct()
+
                 already_sorted = True
 
         else:

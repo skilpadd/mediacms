@@ -128,9 +128,10 @@ def view_channel(request, friendly_token):
     context = {}
     channel = Channel.objects.filter(friendly_token=friendly_token).first()
     if not channel:
-        user = None
-    else:
-        user = channel.user
+        return HttpResponseRedirect("/")
+
+    user = channel.user
+    context["channel"] = channel
     context["user"] = user
     context["CAN_EDIT"] = True if ((user and user == request.user) or is_mediacms_manager(request.user)) else False
     return render(request, "cms/channel.html", context)

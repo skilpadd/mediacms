@@ -132,6 +132,11 @@ const PAGES = {
     component: 'ProfileMediaPage',
     global: { profileId: DEV_SAMPLE_DATA.profileId },
   },
+  'channel-media': {
+    id: 'channel-media',
+    title: 'Channel - Media',
+    component: 'ChannelMediaPage',
+  },
   'profile-about': {
     id: 'profile-about',
     title: 'Profile - About',
