@@ -237,7 +237,7 @@ class User(AbstractUser):
 
 
 class Channel(models.Model):
-    title = models.CharField(max_length=90, db_index=True)
+    title = models.CharField(max_length=200, db_index=True)
     description = models.TextField(blank=True, help_text="description")
     user = models.ForeignKey(User, on_delete=models.CASCADE, db_index=True, related_name="channels")
     add_date = models.DateTimeField(auto_now_add=True, db_index=True)

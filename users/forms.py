@@ -59,13 +59,22 @@ class UserForm(forms.ModelForm):
 class ChannelForm(forms.ModelForm):
     class Meta:
         model = Channel
-        fields = ("banner_logo",)
+        fields = ("title", "description", "banner_logo", "logo")
 
     def clean_banner_logo(self):
         image = self.cleaned_data.get("banner_logo", False)
         if image:
-            if image.size > 2 * 1024 * 1024:
-                raise forms.ValidationError("Image file too large ( > 2mb )")
+            if image.size > 15 * 1024 * 1024:
+                raise forms.ValidationError("Image file too large ( > 15mb )")
             return image
         else:
             raise forms.ValidationError("Please provide a banner")
+
+    def clean_logo(self):
+        image = self.cleaned_data.get("logo", False)
+        if image:
+            if image.size > 15 * 1024 * 1024:
+                raise forms.ValidationError("Image file too large ( > 15mb)")
+            return image
+        else:
+            raise forms.ValidationError("Please provide a logo")
