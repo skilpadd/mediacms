@@ -60,21 +60,37 @@ class ChannelForm(forms.ModelForm):
     class Meta:
         model = Channel
         fields = ("title", "description", "banner_logo", "logo")
+        widgets = {
+            "banner_logo": forms.FileInput(),
+            "logo": forms.FileInput(),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["banner_logo"].required = False
+        self.fields["logo"].required = False
+
+    def _validate_image_size(self, image):
+        max_bytes = 15 * 1024 * 1024
+        if hasattr(image, 'size') and image.size > max_bytes:
+            raise forms.ValidationError("Image file too large ( > 15mb)")
 
     def clean_banner_logo(self):
         image = self.cleaned_data.get("banner_logo", False)
-        if image:
-            if image.size > 15 * 1024 * 1024:
-                raise forms.ValidationError("Image file too large ( > 15mb )")
-            return image
-        else:
-            raise forms.ValidationError("Please provide a banner")
+        if not image:
+            if self.instance:
+                return self.instance.banner_logo
+            return None
+
+        self._validate_image_size(image)
+        return image
 
     def clean_logo(self):
         image = self.cleaned_data.get("logo", False)
-        if image:
-            if image.size > 15 * 1024 * 1024:
-                raise forms.ValidationError("Image file too large ( > 15mb)")
-            return image
-        else:
-            raise forms.ValidationError("Please provide a logo")
+        if not image:
+            if self.instance:
+                return self.instance.logo
+            return None
+
+        self._validate_image_size(image)
+        return image

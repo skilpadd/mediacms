@@ -138,6 +138,20 @@ def view_channel(request, friendly_token):
 
 
 @login_required
+def create_channel(request):
+    if request.method == "POST":
+        form = ChannelForm(request.POST, request.FILES)
+        if form.is_valid():
+            channel = form.save(commit=False)
+            channel.user = request.user
+            channel.save()
+            return HttpResponseRedirect(channel.get_absolute_url())
+    else:
+        form = ChannelForm()
+    return render(request, "cms/channel_create.html", {"form": form})
+
+
+@login_required
 def edit_channel(request, friendly_token):
     channel = Channel.objects.filter(friendly_token=friendly_token).first()
     if not (channel and request.user.is_authenticated and (request.user == channel.user)):
