@@ -81,6 +81,11 @@ function UploadMediaButton({ user, links }) {
 
   const uploadMenuItems = [
     {
+      link: links.createChannel,
+      icon: 'add_circle_outline',
+      text: translateString('Create Channel'),
+    },
+    {
       link: links.user.addMedia,
       icon: 'upload',
       text: translateString('Upload'),

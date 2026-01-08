@@ -37,6 +37,7 @@ export function config(glbl) {
     changePassword: !glbl.user.is.anonymous ? glbl.url.changePassword : '',
     members: glbl.url.members,
     channels: glbl.url.channels,
+    createChannel: glbl.url.createChannel,
     search: {
       base: glbl.url.search,
       query: glbl.url.search + '?q=',
