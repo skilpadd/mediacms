@@ -51,6 +51,7 @@ export function config(glbl) {
           playlists: glbl.user.pages.playlists,
           shared_by_me: glbl.user.pages.media + '/shared_by_me',
           shared_with_me: glbl.user.pages.media + '/shared_with_me',
+          channels: glbl.user.pages.channels,
         }
       : {
           media: glbl.site.url.replace(/\/$/, '') + '/user/' + glbl.profileId,
@@ -58,6 +59,7 @@ export function config(glbl) {
           playlists: glbl.site.url.replace(/\/$/, '') + '/user/' + glbl.profileId + '/playlists',
           shared_by_me: glbl.site.url.replace(/\/$/, '') + '/user/' + glbl.profileId + '/shared_by_me',
           shared_with_me: glbl.site.url.replace(/\/$/, '') + '/user/' + glbl.profileId + '/shared_with_me',
+          channels: glbl.site.url.replace(/\/$/, '') + '/user/' + glbl.profileId + '/channels',
         },
     user: {
       liked: glbl.url.likedMedia,

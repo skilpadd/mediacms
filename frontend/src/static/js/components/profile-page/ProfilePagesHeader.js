@@ -408,6 +408,14 @@ class NavMenuInlineTabs extends React.PureComponent {
                 link={LinksContext._currentValue.profile.playlists}
               />
             ) : null}
+            {
+              <InlineTab
+                id="channels"
+                isActive={'channels' === this.props.type}
+                label={translateString('Channels')}
+                link={LinksContext._currentValue.profile.channels}
+                />
+            }
             {PageStore.get('config-options').pages.profile.includeHistory && this.userIsAuthor ? (
               <InlineTab
                 id="history"

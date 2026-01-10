@@ -149,6 +149,12 @@ const PAGES = {
     component: 'ProfilePlaylistsPage',
     global: { profileId: DEV_SAMPLE_DATA.profileId },
   },
+  'profile-channels': {
+    id: 'profile-channels',
+    title: 'Profile - Channels',
+    component: 'ProfileChannelsPage',
+    global: { profileId: DEV_SAMPLE_DATA.profileId },
+  },
   'profile-shared-by-me': {
     id: 'profile-shared-by-me',
     title: 'Profile - Shared by me',

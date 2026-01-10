@@ -100,6 +100,20 @@ def view_user_about(request, username):
     return render(request, "cms/user_about.html", context)
 
 
+def view_user_channels(request, username):
+    user = get_user(username)
+    if not user:
+        return HttpResponseRedirect("/")
+
+    context = {}
+    context["user"] = user
+    context["CAN_EDIT"] = True if ((user and user == request.user) or is_mediacms_manager(request.user)) else False
+    context["CAN_DELETE"] = True if is_mediacms_manager(request.user) else False
+    context["SHOW_CONTACT_FORM"] = True if (user.allow_contact or is_mediacms_editor(request.user)) else False
+
+    return render(request, "cms/user_channels.html", context)
+
+
 @login_required
 def edit_user(request, username):
     context = {}

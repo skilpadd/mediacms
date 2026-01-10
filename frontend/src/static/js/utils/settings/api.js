@@ -36,6 +36,7 @@ export function init(base_url, endpoints) {
       liked: endpoints.liked,
       history: endpoints.history,
       playlists: endpoints.playlists + '?author=',
+      channels: endpoints.channels + '?username=',
     },
     archive: {
       tags: endpoints.tags,

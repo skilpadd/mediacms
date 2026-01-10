@@ -25,6 +25,7 @@ urlpatterns = [
         views.edit_channel,
         name="edit_channel",
     ),
+    re_path(r"^user/(?P<username>[\w@._-]*)/channels$", views.view_user_channels, name="get_user_channels"),
     # API VIEWS
     path('api/v1/whoami', views.UserWhoami.as_view(), name='user-whoami'),
     path('api/v1/user/token', views.UserToken.as_view(), name='user-token'),

@@ -18,6 +18,7 @@ export * from './ChannelMediaPage';
 export * from './ProfilePlaylistsPage';
 export * from './ProfileSharedByMePage';
 export * from './ProfileSharedWithMePage';
+export * from './ProfileChannelsPage';
 export * from './RecommendedMediaPage';
 export * from './SearchPage';
 export * from './TagsPage';
