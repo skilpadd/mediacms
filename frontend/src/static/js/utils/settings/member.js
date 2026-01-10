@@ -41,6 +41,7 @@ export function init(user, features) {
       about: null,
       media: null,
       playlists: null,
+      channels: null,
     },
   };
 
@@ -89,6 +90,11 @@ export function init(user, features) {
         if ('string' === typeof user.pages.playlists) {
           MEMBER.pages.playlists = user.pages.playlists.trim();
           MEMBER.pages.playlists = '' === MEMBER.pages.playlists ? null : MEMBER.pages.playlists;
+        }
+
+        if ('string' === typeof user.pages.channels) {
+          MEMBER.pages.channels = user.pages.channels.trim();
+          MEMBER.pages.channels = '' === MEMBER.pages.channels ? null : MEMBER.pages.channels;
         }
       }
     }
