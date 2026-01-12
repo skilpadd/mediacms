@@ -9,6 +9,7 @@ import { MediaItem as AttachmentItem } from './MediaItem';
 import { PlaylistItem } from './PlaylistItem';
 import { TaxonomyItem } from './TaxonomyItem';
 import { UserItem } from './UserItem';
+import { ChannelItem } from './ChannelItem';
 
 function extractPlaylistId() {
   let playlistId = null;
@@ -337,6 +338,8 @@ export function ListItem(props) {
   switch (props.type) {
     case 'user':
       return <UserItem {...args} />;
+    case 'channel':
+      return <ChannelItem {...args} />;
     case 'playlist':
       if (window.MediaCMS.site.devEnv) {
         args.link = args.link.replace('/playlists/', 'playlist.html?pl=');

@@ -158,7 +158,7 @@ class ChannelSerializer(serializers.ModelSerializer):
         return self.context['request'].build_absolute_uri(obj.user.get_absolute_url())
 
     def get_media_type(self, obj):
-        return 'image'
+        return 'channel'
 
     class Meta:
         model = Channel
