@@ -33,7 +33,16 @@
 				<div class="media-uploader-top-left-wrap">
 					<h1>{{ "Upload media" | custom_translate:LANGUAGE_CODE}}</h1>
 				</div>
-				<div class="media-uploader-top-right-wrap"> </div>
+				<div class="media-uploader-top-right-wrap">
+					<div class="channel-select-wrap" style="margin-bottom: 15px;">
+						<label for="channel-select">{{ "Select Channel" | custom_translate:LANGUAGE_CODE}}</label>
+						<select id="channel-select" name="channels" style="padding: 8px 12px; min-width: 200px; border-radius: 4px;">
+							{% for channel in user_channels %}
+								<option value="{{ channel.id }}">{{ channel.title }}</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
 			</div>
 			<script type="text/template" id="qq-template">
 				<div class="media-uploader-bottom-wrap qq-uploader-selector">
@@ -163,6 +172,12 @@
 				endpoint: '{% url 'uploader:upload' %}',
 				customHeaders: {
 					'X-CSRFToken': getCSRFToken('csrftoken'),
+				},
+				params: {
+					channel: function() {
+						var select = document.getElementById('channel-select');
+						return select ? select.value : '';
+					}
 				},
 			},
 			retry: {

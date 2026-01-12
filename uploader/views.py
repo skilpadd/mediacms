@@ -15,6 +15,8 @@ from files.models import Media
 from .fineuploader import ChunkedFineUploader
 from .forms import FineUploaderUploadForm, FineUploaderUploadSuccessForm
 
+from users.models import Channel
+
 
 class FineUploaderView(generic.FormView):
     http_method_names = ("post",)
@@ -61,11 +63,19 @@ class FineUploaderView(generic.FormView):
         else:
             self.upload.save()
             return self.make_response({"success": True})
+
+        # Get channel id if provided
+        channel_id = form.cleaned_data.get('channel')
+        channel = Channel.objects.filter(id=channel_id, user=self.request.user).first()
+
         # create media!
         media_file = os.path.join(settings.MEDIA_ROOT, self.upload.real_path)
         with open(media_file, "rb") as f:
             myfile = File(f)
-            new = Media.objects.create(media_file=myfile, user=self.request.user, title=self.upload.original_filename)
+            new = Media.objects.create(media_file=myfile,
+                                       user=self.request.user,
+                                       title=self.upload.original_filename,
+                                       channel=channel)
         rm_file(media_file)
         shutil.rmtree(os.path.join(settings.MEDIA_ROOT, self.upload.file_path))
         return self.make_response({"success": True, "media_url": new.get_absolute_url()})

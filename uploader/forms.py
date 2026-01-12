@@ -10,6 +10,7 @@ class FineUploaderUploadForm(forms.Form):
     qqtotalparts = forms.IntegerField(required=False)
     qqtotalfilesize = forms.IntegerField(required=False)
     qqpartbyteoffset = forms.IntegerField(required=False)
+    channel = forms.IntegerField(required=False)
 
 
 class FineUploaderUploadSuccessForm(forms.Form):
@@ -17,3 +18,4 @@ class FineUploaderUploadSuccessForm(forms.Form):
     qqfilename = forms.CharField()
     qqtotalparts = forms.IntegerField()
     qqtotalfilesize = forms.IntegerField(required=False)
+    channel = forms.IntegerField(required=False)

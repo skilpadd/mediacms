@@ -11,7 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from cms.version import VERSION
 from files.methods import user_allowed_to_upload
-from users.models import User
+from users.models import User, Channel
 
 from .. import helpers
 from ..forms import (
@@ -686,6 +686,7 @@ def upload_media(request):
     context["can_add"] = user_allowed_to_upload(request)
     can_upload_exp = settings.CANNOT_ADD_MEDIA_MESSAGE
     context["can_upload_exp"] = can_upload_exp
+    context["user_channels"] = Channel.objects.filter(user=request.user)
 
     return render(request, "cms/add-media.html", context)
 
