@@ -182,26 +182,6 @@ def edit_channel(request, friendly_token):
     return render(request, "cms/channel_edit.html", {"form": form})
 
 
-@login_required
-@api_view(["GET"])
-@swagger_auto_schema(
-    manual_parameters=[
-        openapi.Parameter(name='page', type=openapi.TYPE_INTEGER, in_=openapi.IN_QUERY, description='Page number'),
-    ],
-    operation_summary='List channels of the current user',
-    operation_description='Paginated listing of channels'
-)
-def my_channels(request):
-    pagination_class = api_settings.DEFAULT_PAGINATION_CLASS
-    paginator = pagination_class()
-
-    channels = Channel.objects.filter(user=request.user)
-    page = paginator.paginate_queryset(channels, request)
-
-    serializer = ChannelSerializer(page, many=True, context={'request': request})
-    return paginator.get_paginated_response(serializer.data)
-
-
 @swagger_auto_schema(
     methods=['post'],
     manual_parameters=[],

@@ -44,6 +44,4 @@ urlpatterns = [
     ),
     re_path(r'^api/v1/channels$', views.ChannelList.as_view(), name='api_channels'),
     re_path(r'^api/v1/channels/$', views.ChannelList.as_view(), name='api_channels'),
-    re_path(r'^api/v1/my_channels$', views.my_channels, name='my_channels'),
-    re_path(r'^api/v1/my_channels/$', views.my_channels, name='my_channels'),
 ]
