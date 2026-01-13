@@ -528,3 +528,9 @@ class ChannelList(APIView):
 
         serializer = ChannelSerializer(page, many=True, context={'request': request})
         return paginator.get_paginated_response(serializer.data)
+
+
+class ChannelDetail(generics.RetrieveAPIView):
+    queryset = Channel.objects.all()
+    serializer_class = ChannelSerializer
+    lookup_field = 'friendly_token'

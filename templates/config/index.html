@@ -3,6 +3,7 @@
 	var MediaCMS = {
 		{% if media %}mediaId: "{{media}}", {% endif %}
 		{% if user %}profileId: "{{user.username}}", {% endif %}
+		{% if channel %}channelToken: "{{channel.frienly_token}}", {% endif %}
 	};
 
 

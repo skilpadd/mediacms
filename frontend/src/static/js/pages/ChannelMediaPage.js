@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ApiUrlContext, LinksConsumer, MemberContext } from '../utils/contexts';
+import { ApiUrlContext, LinksConsumer, MemberContext, SiteContext } from '../utils/contexts';
 import { PageStore, ProfilePageStore } from '../utils/stores';
 import { ProfilePageActions, PageActions } from '../utils/actions';
 import { translateString } from '../utils/helpers';
@@ -27,24 +27,40 @@ export class ChannelMediaPage extends Page {
   constructor(props) {
     super(props, 'channel-media');
 
-    const pathParts = window.location.pathname.split('/');
-    const channelToken = pathParts[pathParts.length - 1] || pathParts[pathParts.length - 2];
-    console.log(`Channel Token: ${channelToken}`);
+    
+    const channelToken = window.MediaCMS?.channelToken || this.getChannelTokenFromUrl();
 
     this.state = {
       channelToken: channelToken,
+      channelData: null,
       requestUrl: null,
-      title: 'Channel Media',
       mediaCount: null,
+      loading: true,
     };
 
     this.getCountFunc = this.getCountFunc.bind(this);
   }
 
+  getChannelTokenFromUrl() {
+    const pathParts = window.location.pathname.split('/');
+    return pathParts[pathParts.length - 1] || pathParts[pathParts.length - 2];
+  }
+
   componentDidMount() {
     if (this.state.channelToken) {
-      const requestUrl = ApiUrlContext._currentValue.media + '?channel=' + this.state.channelToken;
-      this.setState({ requestUrl });
+      fetch(ApiUrlContext._currentValue.channels + '/' + this.state.channelToken)
+      .then(res => res.json())
+      .then(data => {
+        this.setState({
+          channelData: data,
+          requestUrl: ApiUrlContext._currentValue.media + '?channel=' + this.state.channelToken,
+          loading: false,
+        });
+      })
+      .catch(error => {
+        console.error('Failed to load channel:', error);
+        this.setState({ loading: false });
+      })
     }
   }
 
@@ -53,28 +69,60 @@ export class ChannelMediaPage extends Page {
   }
 
   pageContent() {
-    if (!this.state.requestUrl) {
+    const { loading, channelData, requestUrl, mediaCount } = this.state;
+
+    if (loading) {
       return <div>Loading...</div>;
     }
 
-    const titleWithCount = this.state.mediaCount !== null
-    ? `${this.state.title} (${this.state.mediaCount})`
-    : this.state.title;
+    if (!channelData) {
+      return <div>Channel not found</div>;
+    }
+
+    const siteUrl = SiteContext._currentValue.url.replace(/\/+$/, '');
 
     return (
-      <div className="profile-page-content">
-        <MediaListWrapper
-          title={titleWithCount}
-          className="items-list-ver"
-        >
+      <div className="profile-page-wrapper">
+        <div className="profile-page-header">
+          <span className="profile-banner-wrap">
+            {channelData.banner_url ? (
+              <span className="profile-banner" style={{ backgroundImage: `url(${channelData.banner_url})`}}></span>
+            ) : null}
+          </span>
+        
+        <div className="profile-info-nav-wrap">
+          <div className="profile-info">
+            <div className="profile-info-innner">
+              <div>
+                {channelData.thumbnail_url ? (
+                  <img src={channelData.thumbnail_url} alt={channelData.title}/>
+                ): null}
+              </div>
+              <div>
+                <h1>{channelData.title}</h1>
+                {channelData.description ? (
+                  <p className="channel-description">{channelData.description}</p>
+                ): null}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="profile-page-content">
+          <MediaListWrapper
+            title={mediaCount !== null ? `Videos (${mediaCount})` : 'Videos'}
+            className="items-list-ver"
+          >
           <LazyLoadItemListAsync
-            requestUrl={this.state.requestUrl}
+            requestUrl={requestUrl}
             itemsCountCallback={this.getCountFunc}
             hideAuthor={false}
             hideViews={!PageStore.get('config-media-item').displayViews}
             hideDate={!PageStore.get('config-media-item').displayPublishDate}
             />
-        </MediaListWrapper>
+          </MediaListWrapper>
+        </div>
+        </div>
       </div>
     );
   }
@@ -85,5 +133,5 @@ ChannelMediaPage.PropTypes = {
 };
 
 ChannelMediaPage.defaultProps = {
-  title: 'Channel Media',
+  title: 'Channel',
 };
