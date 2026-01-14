@@ -24,6 +24,14 @@ class User(AbstractUser):
         options={"quality": 75},
         blank=True,
     )
+    banner_logo = ProcessedImageField(
+        upload_to="userlogos/%Y/%m/%d",
+        processors=[ResizeToFill(900, 200)],
+        default="userlogos/banner.jpg",
+        format="JPEG",
+        options={"quality": 85},
+        blank=True,
+    )
     description = models.TextField("About me", blank=True)
 
     name = models.CharField("full name", max_length=250, db_index=True)
@@ -61,9 +69,8 @@ class User(AbstractUser):
         return None
 
     def banner_thumbnail_url(self):
-        c = self.channels.filter().order_by("add_date").first()
-        if c:
-            return helpers.url_from_path(c.banner_logo.path)
+        if self.banner_logo:
+            return helpers.url_from_path(self.banner_logo.path)
         return None
 
     @property

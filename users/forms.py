@@ -21,6 +21,7 @@ class UserForm(forms.ModelForm):
             "name",
             "description",
             "logo",
+            "banner_logo",
             "notification_on_comments",
             "is_featured",
             "advancedUser",
