@@ -2,11 +2,32 @@
 {% load static %}
 {% block headtitle %}Edit profile - {% endblock headtitle %}
 
+{% block topimports %}
+<link href="{% static "css/edit-forms.css" %}?v={{ VERSION }}" rel="preload" as="style">
+<link href="{% static "css/edit-forms.css" %}?v={{ VERSION }}" rel="stylesheet">
+{%endblock topimports %}
+
 {% block innercontent %}
 
 <div class="user-action-form-wrap">
 	<div class="user-action-form-inner">
 		<h1>Edit Profile</h1>
+		{% if form.instance.banner_logo %}
+			<div class="current-image-preview">
+				<label>Current Banner</label>
+				<div class="image-preview banner-preview">
+					<img src="{{ form.instance.banner_logo.url }}" alt="Current Banner">
+				</div>
+			</div>
+		{% endif %}
+		{% if form.instance.logo %}
+			<div class="current-image-preview">
+				<label>Current Profile Logo</label>
+				<div class="image-preview logo-preview">
+					<img src="{{ form.instance.logo.url }}" alt="Current Profile Logo">
+				</div>
+			</div>
+		{% endif %}
 		<form enctype="multipart/form-data" action="" method="post" class="post-form">
 			{% csrf_token %}
 			{{ form.as_p }}

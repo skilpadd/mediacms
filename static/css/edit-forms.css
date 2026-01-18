@@ -1,0 +1,54 @@
+.current-image-preview {
+    margin-bottom: 24px;
+}
+
+.current-image-preview label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.dark_theme .current-image-preview label {
+    color: #e0e0e0;
+}
+
+.image-preview {
+    overflow: hidden;
+    border-radius: 12px;
+    border: 2px solid #e0e0e0;
+    background-color: #f5f5f5;
+}
+
+.dark_theme .image-preview {
+    border-color: #444;
+    background-color: #2a2a2a;
+}
+
+.image-preview img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+}
+
+.banner-preview {
+    max-width: 100%;
+    aspect-ratio: 16 / 4;
+}
+
+.banner-preview img {
+    height: 100%;
+    object-fit: cover;
+}
+
+.logo-preview {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+}
+
+.logo-preview img {
+    height: 100%;
+    object-fit: cover;
+}
