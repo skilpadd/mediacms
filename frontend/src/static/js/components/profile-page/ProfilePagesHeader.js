@@ -521,32 +521,6 @@ NavMenuInlineTabs.propTypes = {
   hasActiveSort: PropTypes.bool,
 };
 
-function AddBannerButton(props) {
-  let link = props.link;
-
-  if (window.MediaCMS.site.devEnv) {
-    link = '/edit-channel.html';
-  }
-  return (
-    <a href={link} className="edit-channel-icon" title="Add banner">
-      <i className="material-icons">add_photo_alternate</i>
-    </a>
-  );
-}
-
-function EditBannerButton(props) {
-  let link = props.link;
-
-  if (window.MediaCMS.site.devEnv) {
-    link = '/edit-channel.html';
-  }
-  return (
-    <a href={link} className="edit-channel-icon" title="Edit banner">
-      <i className="material-icons">edit</i>
-    </a>
-  );
-}
-
 function EditProfileButton(props) {
   let link = props.link;
 
@@ -707,14 +681,6 @@ export default function ProfilePagesHeader(props) {
               </PopupMain>
             </PopupContent>
           </span>
-        ) : null}
-
-        {userCanEditProfile && userIsAuthor ? (
-          props.author.banner_thumbnail_url ? (
-            <EditBannerButton link={ProfilePageStore.get('author-data').default_channel_edit_url} />
-          ) : (
-            <AddBannerButton link={ProfilePageStore.get('author-data').default_channel_edit_url} />
-          )
         ) : null}
       </span>
 
