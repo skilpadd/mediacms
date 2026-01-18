@@ -182,7 +182,7 @@ export default function ChannelPagesHeader(props) {
     profileNavTop: 0,
   };
 
-  const userIsChannelOwner = !MemberContext._currentValue.is.anonymous && props.channel?.user?.username === MemberContext._currentValue.username;
+  const userIsChannelOwner = !MemberContext._currentValue.is.anonymous && props.channel?.author_name === MemberContext._currentValue.username;
   const userCanEditChannel = userIsChannelOwner;
 
   function updateProfileNavTopPosition() {
@@ -229,6 +229,11 @@ export default function ChannelPagesHeader(props) {
             className="profile-banner"
             style={{backgroundImage: `url(${props.channel.banner_url})`}}
           ></span>
+        ) : null}
+        {userCanEditChannel ? (
+          <a href={props.channelUrl + '/edit'} className="edit-channel-icon" title="Edit Channel">
+            <i className="material-icons">edit</i>
+          </a>
         ) : null}
       </span>
 
