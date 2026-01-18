@@ -30,6 +30,10 @@ class UserForm(forms.ModelForm):
             "is_approved",
             # "allow_contact",
         )
+        widgets = {
+            "banner_logo": forms.FileInput(),
+            "logo": forms.FileInput(),
+        }
 
     def clean_logo(self):
         image = self.cleaned_data.get("logo", False)
