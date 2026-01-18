@@ -182,6 +182,19 @@ def edit_channel(request, friendly_token):
     return render(request, "cms/channel_edit.html", {"form": form})
 
 
+def view_channel_about(request, friendly_token):
+    context = {}
+    channel = Channel.objects.filter(friendly_token=friendly_token).first()
+    if not channel:
+        return HttpResponseRedirect("/")
+
+    user = channel.user
+    context["channel"] = channel
+    context["user"] = user
+    context["CAN_EDIT"] = True if ((user and user == request.user) or is_mediacms_manager(request.user)) else False
+    return render(request, "cms/channel_about.html", context)
+
+
 @swagger_auto_schema(
     methods=['post'],
     manual_parameters=[],

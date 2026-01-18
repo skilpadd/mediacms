@@ -1,23 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ApiUrlContext, LinksConsumer, MemberContext, SiteContext } from '../utils/contexts';
-import { PageStore, ProfilePageStore } from '../utils/stores';
-import { ProfilePageActions, PageActions } from '../utils/actions';
-import { translateString } from '../utils/helpers';
+import { ApiUrlContext, SiteContext } from '../utils/contexts';
+import { PageStore } from '../utils/stores';
 import { MediaListWrapper } from '../components/MediaListWrapper';
-import ProfilePagesHeader from '../components/profile-page/ProfilePagesHeader';
-import ProfilePagesContent from '../components/profile-page/ProfilePagesContent';
 import { LazyLoadItemListAsync } from '../components/item-list/LazyLoadItemListAsync';
-import { BulkActionConfirmModal } from '../components/BulkActionConfirmModal';
-import { BulkActionPermissionModal } from '../components/BulkActionPermissionModal';
-import { BulkActionPlaylistModal } from '../components/BulkActionPlaylistModal';
-import { BulkActionChangeOwnerModal } from '../components/BulkActionChangeOwnerModal';
-import { BulkActionPublishStateModal } from '../components/BulkActionPublishStateModal';
-import { BulkActionCategoryModal } from '../components/BulkActionCategoryModal';
-import { BulkActionTagModal } from '../components/BulkActionTagModal';
-import { ProfileMediaFilters } from '../components/search-filters/ProfileMediaFilters';
-import { ProfileMediaTags } from '../components/search-filters/ProfileMediaTags';
-import { ProfileMediaSorting } from '../components/search-filters/ProfileMediaSorting';
+import ChannelPagesHeader from '../components/channel-page/ChannelPagesHeader';
+import ProfilePagesContent from '../components/profile-page/ProfilePagesContent';
 
 import { Page } from './_Page';
 
@@ -26,9 +14,8 @@ import '../components/profile-page/ProfilePage.scss';
 export class ChannelMediaPage extends Page {
   constructor(props) {
     super(props, 'channel-media');
-
     
-    const channelToken = window.MediaCMS?.channelToken || this.getChannelTokenFromUrl();
+    const channelToken = window.MediaCMS?.channelToken
 
     this.state = {
       channelToken: channelToken,
@@ -39,11 +26,6 @@ export class ChannelMediaPage extends Page {
     };
 
     this.getCountFunc = this.getCountFunc.bind(this);
-  }
-
-  getChannelTokenFromUrl() {
-    const pathParts = window.location.pathname.split('/');
-    return pathParts[pathParts.length - 1] || pathParts[pathParts.length - 2];
   }
 
   componentDidMount() {
@@ -80,51 +62,31 @@ export class ChannelMediaPage extends Page {
     }
 
     const siteUrl = SiteContext._currentValue.url.replace(/\/+$/, '');
+    const channelUrl = siteUrl + '/channel/' + this.state.channelToken;
 
-    return (
-      <div className="profile-page-wrapper">
-        <div className="profile-page-header">
-          <span className="profile-banner-wrap">
-            {channelData.banner_url ? (
-              <span className="profile-banner" style={{ backgroundImage: `url(${channelData.banner_url})`}}></span>
-            ) : null}
-          </span>
-        
-        <div className="profile-info-nav-wrap">
-          <div className="profile-info">
-            <div className="profile-info-innner">
-              <div>
-                {channelData.thumbnail_url ? (
-                  <img src={channelData.thumbnail_url} alt={channelData.title}/>
-                ): null}
-              </div>
-              <div>
-                <h1>{channelData.title}</h1>
-                {channelData.description ? (
-                  <p className="channel-description">{channelData.description}</p>
-                ): null}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="profile-page-content">
-          <MediaListWrapper
-            title={mediaCount !== null ? `Videos (${mediaCount})` : 'Videos'}
-            className="items-list-ver"
-          >
+    return [
+      <ChannelPagesHeader
+        key="ChannelPagesHeader"
+        type="media"
+        channel={channelData}
+        channelUrl={channelUrl}
+      />,
+      <ProfilePagesContent key="ProfilePagesContent">
+        <MediaListWrapper
+          title={mediaCount !== null ? `Uploads (${mediaCount})` : "Uploads"}
+          className="items-list-ver"
+          showBulkActions={false}
+        >
           <LazyLoadItemListAsync
             requestUrl={requestUrl}
             itemsCountCallback={this.getCountFunc}
             hideAuthor={false}
             hideViews={!PageStore.get('config-media-item').displayViews}
             hideDate={!PageStore.get('config-media-item').displayPublishDate}
-            />
-          </MediaListWrapper>
-        </div>
-        </div>
-      </div>
-    );
+          />
+        </MediaListWrapper>
+      </ProfilePagesContent>
+    ];
   }
 }
 

@@ -137,6 +137,11 @@ const PAGES = {
     title: 'Channel - Media',
     component: 'ChannelMediaPage',
   },
+  'channel-about': {
+    id: 'channel-about',
+    title: 'Channel - About',
+    component: 'ChannelAboutPage',
+  },
   'profile-about': {
     id: 'profile-about',
     title: 'Profile - About',

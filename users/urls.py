@@ -20,11 +20,8 @@ urlpatterns = [
     re_path(r"^user/(?P<username>[\w@._-]*)/edit$", views.edit_user, name="edit_user"),
     re_path(r"^channel/create$", views.create_channel, name="create_channel"),
     re_path(r"^channel/(?P<friendly_token>[\w]*)$", views.view_channel, name="view_channel"),
-    re_path(
-        r"^channel/(?P<friendly_token>[\w]*)/edit$",
-        views.edit_channel,
-        name="edit_channel",
-    ),
+    re_path(r"^channel/(?P<friendly_token>[\w]*)/edit$", views.edit_channel, name="edit_channel"),
+    re_path(r"^channel/(?P<friendly_token>[\w]*)/about$", views.view_channel_about, name="view_channel_about"),
     re_path(r"^user/(?P<username>[\w@._-]*)/channels$", views.view_user_channels, name="get_user_channels"),
     # API VIEWS
     path('api/v1/whoami', views.UserWhoami.as_view(), name='user-whoami'),
