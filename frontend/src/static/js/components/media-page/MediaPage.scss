@@ -1482,6 +1482,37 @@
 }
 
 .media-info-content {
+  .media-channel-banner {
+    @extend .media-author-banner;
+  }
+
+  .channel-banner-thumb {
+    @extend .author-banner-thumb;
+  }
+
+  .channel-banner-name {
+    @extend .author-banner-name;
+  }
+
+  .media-channel-banner + .media-author-banner {
+    margin-top: 30px;
+    margin-left: 10px;
+
+    .author-banner-thumb span {
+      width: 32px;
+      height: 32px;
+      margin-right: 12px;
+    }
+
+    .author-banner-name {
+      font-size: 13px;
+    }
+
+    .author-banner-date {
+      font-size: 12px;
+    }
+  }
+
   .media-author-banner {
     display: table;
     padding: 0 16px;

@@ -59,6 +59,29 @@ function MediaAuthorBanner(props) {
   );
 }
 
+function MediaChannelBanner(props) {
+  if (!props.title) return null;
+
+  return (
+    <div className="media-channel-banner">
+      <div>
+        <a className="channel-banner-thumb" href={props.link || null} title={props.title}>
+          <span style={{ backgroundImage: 'url(' + props.thumb + ')' }}>
+            <img src={props.thumb} loading="lazy" alt={props.title} title={props.title} />
+          </span>
+        </a>
+      </div>
+      <div>
+        <span>
+          <a href={props.link} className="channel-banner-name" title={props.title}>
+            <span>{props.title}</span>
+          </a>
+        </span>
+      </div>
+    </div>
+  );
+}
+
 function MediaMetaField(props) {
   return (
     <div className={props.id.trim() ? 'media-content-' + props.id.trim() : null}>
@@ -180,8 +203,19 @@ export default function ViewerInfoContent(props) {
     return text.replace(timeRegex, wrapTimestampWithAnchor);
   }
 
+  const channelLink = props.channel?.url ? formatInnerLink(props.channel.url, SiteContext._currentValue.url) : null;
+  const channelThumb = props.channel?.thumb ? formatInnerLink(props.channel.thumb, SiteContext._currentValue.url) : null;
+
   return (
     <div className="media-info-content">
+      {props.channel?.title ? (
+        <MediaChannelBanner
+          link={channelLink}
+          thumb={channelThumb}
+          title={props.channel.title}
+        />
+      ) : null}
+
       {void 0 === PageStore.get('config-media-item').displayAuthor ||
       null === PageStore.get('config-media-item').displayAuthor ||
       !!PageStore.get('config-media-item').displayAuthor ? (

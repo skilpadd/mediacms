@@ -15,6 +15,9 @@ class MediaSerializer(serializers.ModelSerializer):
     thumbnail_url = serializers.SerializerMethodField()
     author_profile = serializers.SerializerMethodField()
     author_thumbnail = serializers.SerializerMethodField()
+    channel_title = serializers.SerializerMethodField()
+    channel_url = serializers.SerializerMethodField()
+    channel_thumbnail = serializers.SerializerMethodField()
 
     def get_url(self, obj):
         return self.context["request"].build_absolute_uri(obj.get_absolute_url())
@@ -34,6 +37,20 @@ class MediaSerializer(serializers.ModelSerializer):
     def get_author_thumbnail(self, obj):
         return self.context["request"].build_absolute_uri(obj.author_thumbnail())
 
+    def get_channel_title(self, obj):
+        if obj.channel:
+            return obj.channel.title
+        return None
+
+    def get_channel_url(self, obj):
+        if obj.channel:
+            return self.context["request"].build_absolute_uri(obj.channel.get_absolute_url())
+        return None
+
+    def get_channel_thumbnail(self, obj):
+        if obj.channel:
+            return self.context["request"].build_absolute_uri(obj.channel.thumbnail_url())
+
     class Meta:
         model = Media
         read_only_fields = (
@@ -51,6 +68,9 @@ class MediaSerializer(serializers.ModelSerializer):
             "size",
             "is_reviewed",
             "featured",
+            "channel_title",
+            "channel_url",
+            "channel_thumbnail",
         )
         fields = (
             "friendly_token",
@@ -78,6 +98,9 @@ class MediaSerializer(serializers.ModelSerializer):
             "featured",
             "user_featured",
             "size",
+            "channel_title",
+            "channel_url",
+            "channel_thumbnail",
             # "category",
         )
 
@@ -102,6 +125,9 @@ class SingleMediaSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source="user.username")
     url = serializers.SerializerMethodField()
     is_shared = serializers.SerializerMethodField()
+    channel_title = serializers.SerializerMethodField()
+    channel_url = serializers.SerializerMethodField()
+    channel_thumbnail = serializers.SerializerMethodField()
 
     def get_url(self, obj):
         return self.context["request"].build_absolute_uri(obj.get_absolute_url())
@@ -111,6 +137,20 @@ class SingleMediaSerializer(serializers.ModelSerializer):
         custom_permissions = obj.permissions.exists()
         rbac_categories = obj.category.filter(is_rbac_category=True).exists()
         return custom_permissions or rbac_categories
+
+    def get_channel_title(self, obj):
+        if obj.channel:
+            return obj.channel.title
+        return None
+
+    def get_channel_url(self, obj):
+        if obj.channel:
+            return self.context["request"].build_absolute_uri(obj.channel.get_absolute_url())
+        return None
+
+    def get_channel_thumbnail(self, obj):
+        if obj.channel:
+            return self.context["request"].build_absolute_uri(obj.channel.thumbnail_url())
 
     class Meta:
         model = Media
@@ -130,6 +170,9 @@ class SingleMediaSerializer(serializers.ModelSerializer):
             "size",
             "video_height",
             "is_reviewed",
+            "channel_title",
+            "channel_url",
+            "channel_thumbnail",
         )
         fields = (
             "url",
@@ -174,6 +217,9 @@ class SingleMediaSerializer(serializers.ModelSerializer):
             "add_subtitle_url",
             "allow_download",
             "slideshow_items",
+            "channel_title",
+            "channel_url",
+            "channel_thumbnail",
         )
 
 
