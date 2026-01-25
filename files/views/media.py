@@ -192,7 +192,7 @@ class MediaList(APIView):
         elif channel_param:
             channel = get_object_or_404(Channel, friendly_token=channel_param)
             if self.request.user == channel.user or is_mediacms_editor(self.request.user):
-                media = Media.objects.filter(channel=channel).prefetch_related("user", "tags")
+                media = Media.objects.filter(channels=channel).prefetch_related("user", "tags")
             else:
                 base_queryset = Media.objects.prefetch_related("user", "tags")
                 base_filters = Q(listable=True)
@@ -203,11 +203,11 @@ class MediaList(APIView):
                     conditions = base_filters
                     permissions_filter = {'user': request.user}
                     if MediaPermission.objects.filter(**permissions_filter).exists():
-                        conditions |= Q(permissions__user=request.user, channel=channel)
+                        conditions |= Q(permissions__user=request.user, channels=channel)
 
                     if getattr(settings, 'USE_RBAC', False):
                         rbac_categories = request.user.get_rbac_categories_as_member()
-                        conditions |= Q(category__in=rbac_categories, channel=channel)
+                        conditions |= Q(category__in=rbac_categories, channels=channel)
 
                     media = base_queryset.filter(conditions).distinct()
 

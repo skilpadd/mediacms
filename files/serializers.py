@@ -38,18 +38,22 @@ class MediaSerializer(serializers.ModelSerializer):
         return self.context["request"].build_absolute_uri(obj.author_thumbnail())
 
     def get_channel_title(self, obj):
-        if obj.channel:
-            return obj.channel.title
+        channel = obj.channels.first()
+        if channel:
+            return channel.title
         return None
 
     def get_channel_url(self, obj):
-        if obj.channel:
-            return self.context["request"].build_absolute_uri(obj.channel.get_absolute_url())
+        channel = obj.channels.first()
+        if channel:
+            return self.context["request"].build_absolute_uri(channel.get_absolute_url())
         return None
 
     def get_channel_thumbnail(self, obj):
-        if obj.channel:
-            return self.context["request"].build_absolute_uri(obj.channel.thumbnail_url())
+        channel = obj.channels.first()
+        if channel:
+            return self.context["request"].build_absolute_uri(channel.thumbnail_url())
+        return None
 
     class Meta:
         model = Media
@@ -139,18 +143,21 @@ class SingleMediaSerializer(serializers.ModelSerializer):
         return custom_permissions or rbac_categories
 
     def get_channel_title(self, obj):
-        if obj.channel:
-            return obj.channel.title
+        channel = obj.channels.first()
+        if channel:
+            return channel.title
         return None
 
     def get_channel_url(self, obj):
-        if obj.channel:
-            return self.context["request"].build_absolute_uri(obj.channel.get_absolute_url())
+        channel = obj.channels.first()
+        if channel:
+            return self.context["request"].build_absolute_uri(channel.get_absolute_url())
         return None
 
     def get_channel_thumbnail(self, obj):
-        if obj.channel:
-            return self.context["request"].build_absolute_uri(obj.channel.thumbnail_url())
+        channel = obj.channels.first()
+        if channel:
+            return self.context["request"].build_absolute_uri(channel.thumbnail_url())
 
     class Meta:
         model = Media

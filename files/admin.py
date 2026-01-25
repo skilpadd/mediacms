@@ -35,7 +35,7 @@ class MediaAdmin(admin.ModelAdmin):
     list_display = [
         "title",
         "user",
-        "channel",
+        "get_channels",
         "add_date",
         "media_type",
         "duration",
@@ -49,6 +49,9 @@ class MediaAdmin(admin.ModelAdmin):
     ordering = ("-add_date",)
     readonly_fields = ("tags", "category",)
 
+    def get_channels(self, obj):
+        return ", ".join([channel.title for channel in obj.channels.all()])
+
     def get_comments_count(self, obj):
         return obj.comments.count()
 
@@ -59,6 +62,7 @@ class MediaAdmin(admin.ModelAdmin):
 
     actions = [generate_missing_encodings]
     get_comments_count.short_description = "Comments count"
+    get_channels.short_description = "Channels"
 
 
 class CategoryAdminForm(forms.ModelForm):

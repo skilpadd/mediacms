@@ -74,8 +74,11 @@ class FineUploaderView(generic.FormView):
             myfile = File(f)
             new = Media.objects.create(media_file=myfile,
                                        user=self.request.user,
-                                       title=self.upload.original_filename,
-                                       channel=channel)
+                                       title=self.upload.original_filename)
+
+            if channel:
+                new.channels.add(channel)
+
         rm_file(media_file)
         shutil.rmtree(os.path.join(settings.MEDIA_ROOT, self.upload.file_path))
         return self.make_response({"success": True, "media_url": new.get_absolute_url()})

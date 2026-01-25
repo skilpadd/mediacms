@@ -46,12 +46,11 @@ class Media(models.Model):
 
     category = models.ManyToManyField("Category", blank=True, help_text="Media can be part of one or more categories")
 
-    channel = models.ForeignKey(
+    channels = models.ManyToManyField(
         "users.Channel",
-        on_delete=models.CASCADE,
         blank=True,
-        null=True,
-        help_text="Media can exist in one or no Channels",
+        related_name="media_items",
+        help_text="Media can exist in multiple Channels",
     )
     description = models.TextField(blank=True)
 
