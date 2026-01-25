@@ -178,5 +178,6 @@ class ChannelSerializer(serializers.ModelSerializer):
             'author_name',
             'author_profile',
             'add_date',
-            'media_type'
+            'media_type',
+            'friendly_token',
         ]

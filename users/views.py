@@ -543,7 +543,8 @@ class ChannelList(APIView):
         return paginator.get_paginated_response(serializer.data)
 
 
-class ChannelDetail(generics.RetrieveAPIView):
+class ChannelDetail(generics.RetrieveDestroyAPIView):
     queryset = Channel.objects.all()
     serializer_class = ChannelSerializer
     lookup_field = 'friendly_token'
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsUserOrManager)

@@ -1,9 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { MemberContext } from '../../utils/contexts';
-import { PageStore } from '../../utils/stores';
-import { CircleIconButton } from '../_shared';
+import { usePopup } from '../../utils/hooks/';
+import { CircleIconButton, PopupMain } from '../_shared';
+import { MemberContext, SiteContext } from '../../utils/contexts';
+import ChannelPageStore from '../../utils/stores/ChannelPageStore';
 import { translateString } from '../../utils/helpers';
+import { ChannelPageActions } from '../../utils/actions/';
+import { PageStore } from '../../utils/stores/';
 
 function InlineTab(props) {
   return (
@@ -173,6 +176,8 @@ NavMenuInlineTabs.propTypes = {
 };
 
 export default function ChannelPagesHeader(props) {
+  const [popupContentRef, PopupContent, PopupTrigger] = usePopup();
+
   const profilePageHeaderRef = useRef(null);
   const profileNavRef = useRef(null);
 
@@ -183,7 +188,27 @@ export default function ChannelPagesHeader(props) {
   };
 
   const userIsChannelOwner = !MemberContext._currentValue.is.anonymous && props.channel?.author_name === MemberContext._currentValue.username;
-  const userCanEditChannel = userIsChannelOwner;
+  const userCanDeleteChannel = userIsChannelOwner || MemberContext._currentValue.is.admin;
+  const userCanEditChannel = userCanDeleteChannel;
+  
+  function cancelChannelRemoval() {
+    popupContentRef.current.toggle();
+  }
+
+  function proceedChannelRemoval() {
+    ChannelPageActions.remove_channel(props.channel.friendly_token);
+    popupContentRef.current.toggle();
+  }
+
+  function onChannelDelete() {
+    setTimeout(function () {
+      window.location.href = SiteContext._currentValue.url;
+    }, 1000);
+  }
+
+  function onChannelDeleteFail() {
+    alert('Failed to delete the channel');
+  }
 
   function updateProfileNavTopPosition() {
     positions.profileHeaderTop = profilePageHeaderRef.current.offsetTop;
@@ -207,6 +232,11 @@ export default function ChannelPagesHeader(props) {
   }
 
   useEffect(() => {
+    if (userCanDeleteChannel) {
+      ChannelPageStore.on('channel_delete', onChannelDelete);
+      ChannelPageStore.on('channel_delete_fail', onChannelDeleteFail);
+    }
+
     PageStore.on('resize', onWindowResize);
     PageStore.on('changed_page_sidebar_visibility', onWindowResize);
     PageStore.on('window_scroll', onWindowScroll);
@@ -215,6 +245,11 @@ export default function ChannelPagesHeader(props) {
     updateFixedNavPosition();
 
     return () => {
+      if (userCanDeleteChannel) {
+        ChannelPageStore.removeListener('channel_delete', onChannelDelete);
+        ChannelPageStore.removeListener('channel_delete_fail', onChannelDeleteFail);
+      }
+
       PageStore.removeListener('resize', onWindowResize);
       PageStore.removeListener('changed_page_sidebar_visibility', onWindowResize);
       PageStore.removeListener('window_scroll', onWindowScroll);
@@ -229,6 +264,33 @@ export default function ChannelPagesHeader(props) {
             className="profile-banner"
             style={{backgroundImage: `url(${props.channel.banner_url})`}}
           ></span>
+        ) : null}
+        {userCanDeleteChannel ? (
+          <span className="delete-profile-wrap">
+            <PopupTrigger contentRef={popupContentRef}>
+              <button className="delete-profile" title="Remove channel">
+                <i className="material-icons">delete</i>
+              </button>
+            </PopupTrigger>
+
+            <PopupContent contentRef={popupContentRef}>
+              <PopupMain>
+                <div className="popup-message">
+                  <span className="popup-message-title">Channel removal</span>
+                  <span className="popup-message-main">You're willing to remove channel permanently?</span>
+                </div>
+                <hr />
+                <span className="popup-message-bottom">
+                  <button className="button-link cancel-profile-removal" onClick={cancelChannelRemoval}>
+                    CANCEL
+                  </button>
+                  <button className="button-link proceed-profile-removal" onClick={proceedChannelRemoval}>
+                    PROCEED
+                  </button>
+                </span>
+              </PopupMain>
+            </PopupContent>
+          </span>
         ) : null}
         {userCanEditChannel ? (
           <a href={props.channelUrl + '/edit'} className="edit-channel-icon" title="Edit Channel">
