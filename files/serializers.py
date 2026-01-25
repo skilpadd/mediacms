@@ -18,6 +18,7 @@ class MediaSerializer(serializers.ModelSerializer):
     channel_title = serializers.SerializerMethodField()
     channel_url = serializers.SerializerMethodField()
     channel_thumbnail = serializers.SerializerMethodField()
+    channels_info = serializers.SerializerMethodField()
 
     def get_url(self, obj):
         return self.context["request"].build_absolute_uri(obj.get_absolute_url())
@@ -55,6 +56,17 @@ class MediaSerializer(serializers.ModelSerializer):
             return self.context["request"].build_absolute_uri(channel.thumbnail_url())
         return None
 
+    def get_channels_info(self, obj):
+        channels = []
+        for channel in obj.channels.all():
+            channels.append({
+                "title": channel.title,
+                "url": self.context["request"].build_absolute_uri(channel.get_absolute_url()),
+                "thumbnail": self.context["request"].build_absolute_uri(channel.thumbnail_url())
+            })
+
+        return channels
+
     class Meta:
         model = Media
         read_only_fields = (
@@ -75,6 +87,7 @@ class MediaSerializer(serializers.ModelSerializer):
             "channel_title",
             "channel_url",
             "channel_thumbnail",
+            "channels_info",
         )
         fields = (
             "friendly_token",
@@ -105,6 +118,7 @@ class MediaSerializer(serializers.ModelSerializer):
             "channel_title",
             "channel_url",
             "channel_thumbnail",
+            "channels_info",
             # "category",
         )
 
@@ -132,6 +146,7 @@ class SingleMediaSerializer(serializers.ModelSerializer):
     channel_title = serializers.SerializerMethodField()
     channel_url = serializers.SerializerMethodField()
     channel_thumbnail = serializers.SerializerMethodField()
+    channels_info = serializers.SerializerMethodField()
 
     def get_url(self, obj):
         return self.context["request"].build_absolute_uri(obj.get_absolute_url())
@@ -159,6 +174,17 @@ class SingleMediaSerializer(serializers.ModelSerializer):
         if channel:
             return self.context["request"].build_absolute_uri(channel.thumbnail_url())
 
+    def get_channels_info(self, obj):
+        channels = []
+        for channel in obj.channels.all():
+            channels.append({
+                "title": channel.title,
+                "url": self.context["request"].build_absolute_uri(channel.get_absolute_url()),
+                "thumbnail": self.context["request"].build_absolute_uri(channel.thumbnail_url())
+            })
+
+        return channels
+
     class Meta:
         model = Media
         read_only_fields = (
@@ -180,6 +206,7 @@ class SingleMediaSerializer(serializers.ModelSerializer):
             "channel_title",
             "channel_url",
             "channel_thumbnail",
+            "channels_info",
         )
         fields = (
             "url",
@@ -227,6 +254,7 @@ class SingleMediaSerializer(serializers.ModelSerializer):
             "channel_title",
             "channel_url",
             "channel_thumbnail",
+            "channels_info",
         )
 
 

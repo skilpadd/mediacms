@@ -23,7 +23,7 @@ export default class ViewerInfo extends React.PureComponent {
   }
 
   render() {
-    let views, categories, title, author, published, description, channel;
+    let views, categories, title, author, published, description, channels;
     let allowDownload = false;
 
     if (this.state.videoLoaded) {
@@ -48,18 +48,14 @@ export default class ViewerInfo extends React.PureComponent {
       published = MediaPageStore.get('media-data').add_date;
       description = MediaPageStore.get('media-data').description;
 
-      channel = {
-        title: MediaPageStore.get('media-data').channel_title,
-        url: MediaPageStore.get('media-data').channel_url,
-        thumb: MediaPageStore.get('media-data').channel_thumbnail,
-      };
+      channels = MediaPageStore.get('media-data').channels_info || [];
     }
 
     return !this.state.videoLoaded ? null : (
       <div className="viewer-info">
         <div className="viewer-info-inner">
           <ViewerInfoTitleBanner title={title} views={views} categories={categories} allowDownload={allowDownload} />
-          <ViewerInfoContent author={author} published={published} description={description} channel={channel} />
+          <ViewerInfoContent author={author} published={published} description={description} channels={channels} />
         </div>
       </div>
     );

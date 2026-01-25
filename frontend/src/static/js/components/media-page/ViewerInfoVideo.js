@@ -6,7 +6,7 @@ import ViewerInfo from './ViewerInfo';
 
 export default class ViewerInfoVideo extends ViewerInfo {
   render() {
-    let views, categories, title, author, published, description, channel;
+    let views, categories, title, author, published, description, channels;
     let allowDownload = false;
 
     if (this.state.videoLoaded) {
@@ -28,11 +28,7 @@ export default class ViewerInfoVideo extends ViewerInfo {
         thumb: MediaPageStore.get('media-author-thumbnail-url'),
       };
 
-      channel = {
-        title: MediaPageStore.get('media-data').channel_title,
-        url: MediaPageStore.get('media-data').channel_url,
-        thumb: MediaPageStore.get('media-data').channel_thumbnail,
-      };
+      channels = MediaPageStore.get('media-data').channels_info || [];
 
       published = MediaPageStore.get('media-data').add_date;
       description = MediaPageStore.get('media-data').description;
@@ -47,7 +43,7 @@ export default class ViewerInfoVideo extends ViewerInfo {
             categories={categories}
             allowDownload={allowDownload}
           />
-          <ViewerInfoContent author={author} published={published} description={description} channel={channel} />
+          <ViewerInfoContent author={author} published={published} description={description} channels={channels} />
         </div>
       </div>
     );

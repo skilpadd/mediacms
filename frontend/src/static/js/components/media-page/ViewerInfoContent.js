@@ -203,18 +203,21 @@ export default function ViewerInfoContent(props) {
     return text.replace(timeRegex, wrapTimestampWithAnchor);
   }
 
-  const channelLink = props.channel?.url ? formatInnerLink(props.channel.url, SiteContext._currentValue.url) : null;
-  const channelThumb = props.channel?.thumb ? formatInnerLink(props.channel.thumb, SiteContext._currentValue.url) : null;
+  const formattedChannels = (props.channels || []).map(channel => ({
+    title: channel.title,
+    link: channel?.url ? formatInnerLink(channel.url, SiteContext._currentValue.url) : null,
+    thumb: channel?.thumbnail ? formatInnerLink(channel.thumbnail, SiteContext._currentValue.url) : null
+  }));
 
   return (
     <div className="media-info-content">
-      {props.channel?.title ? (
+      {formattedChannels.map(channel => (
         <MediaChannelBanner
-          link={channelLink}
-          thumb={channelThumb}
-          title={props.channel.title}
+          link={channel.link}
+          thumb={channel.thumb}
+          title={channel.title}
         />
-      ) : null}
+      ))}
 
       {void 0 === PageStore.get('config-media-item').displayAuthor ||
       null === PageStore.get('config-media-item').displayAuthor ||
