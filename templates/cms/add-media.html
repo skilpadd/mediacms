@@ -30,11 +30,12 @@
 
 		<div class="media-uploader-wrap">
 			<div class="media-uploader-top-wrap">
-				<div class="media-uploader-top-left-wrap">
-					<h1>{{ "Upload media" | custom_translate:LANGUAGE_CODE}}</h1>
-				</div>
 				<div class="media-uploader-top-right-wrap">
 					<div class="channel-select-wrap" style="margin-bottom: 15px;">
+						<div class="media-uploader-top-left-wrap">
+							<h1>{{ "Upload media" | custom_translate:LANGUAGE_CODE}}</h1>
+						</div>
+
 						<label for="channel-select">{{ "Select Channel" | custom_translate:LANGUAGE_CODE}}</label>
 						{{ channel_form.media }}
 						{{ channel_form.channels}}

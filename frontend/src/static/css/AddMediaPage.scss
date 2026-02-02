@@ -71,6 +71,14 @@ dialog {
   }
 }
 
+.channel-select-wrap {
+  background-color: var(--add-media-page-tmplt-uploader-bg-color);
+  padding: 1rem 1.5rem;
+  border-radius: 2px;
+  box-shadow: inset 0px 4px 8px -3px rgba(17, 17, 17, 0.06);
+  width: 100%;
+}
+
 .media-uploader-wrap {
   position: relative;
   width: 100%;
@@ -109,6 +117,9 @@ dialog {
 .media-uploader-top-wrap {
   position: relative;
   padding: 0 0 1.5em;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
   h1 {
     display: block;
     font-size: 16px;
@@ -129,7 +140,8 @@ dialog {
 .media-uploader-top-left-wrap,
 .media-uploader-top-right-wrap {
   position: relative;
-  width: 50%;
+  width: 100%;
+  margin-bottom: 5px;
 }
 
 .media-uploader-bottom-left-wrap,
