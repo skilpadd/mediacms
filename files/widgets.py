@@ -37,3 +37,40 @@ class CategoryModalWidget(forms.SelectMultiple):
 </div>'''
 
         return mark_safe(html)
+
+
+class ChannelModalWidget(forms.SelectMultiple):
+    """Two-panel channel selector with modal"""
+
+    class Media:
+        css = {'all': ('css/channel_modal.css',)}
+        js = ('js/channel_modal.js',)
+
+    def render(self, name, value, attrs=None, renderer=None):
+        # Get all channels as JSON
+        channels = []
+        for opt_value, opt_label in self.choices:
+            if opt_value:  # Skip empty choice
+                channels.append({'id': str(opt_value), 'title': str(opt_label)})
+
+        all_channels_json = json.dumps(channels)
+        selected_ids_json = json.dumps([str(v) for v in (value or [])])
+
+        html = f'''
+          <div class="channel-widget" data-name="{name}">
+            <div class="channel-content">
+              <div class="channel-panel">
+                <input type="text" class="channel-search" placeholder="Search channels...">
+                <div class="channel-list scrollable" data-panel="left"></div>
+              </div>
+              <div class="channel-panel">
+                <h3>Selected Channels</h3>
+                <div class="channel-list scrollable" data-panel="right"></div>
+              </div>
+            </div>
+            <div class="hidden-inputs"></div>
+            <script type="application/json" class="channel-data">{{"all":{all_channels_json},"selected":{selected_ids_json}}}</script>
+          </div>
+        '''
+
+        return mark_safe(html)
