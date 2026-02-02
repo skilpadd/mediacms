@@ -35,6 +35,7 @@ from ..methods import (
 )
 from ..models import Category, Media, Page, Playlist, Subtitle, Tag, VideoTrimRequest
 from ..tasks import save_user_action, video_trim_task
+from uploader.forms import ChannelSelectForm
 
 
 def get_page(request, slug):
@@ -687,6 +688,7 @@ def upload_media(request):
     can_upload_exp = settings.CANNOT_ADD_MEDIA_MESSAGE
     context["can_upload_exp"] = can_upload_exp
     context["user_channels"] = Channel.objects.filter(user=request.user)
+    context["channel_form"] = ChannelSelectForm(user=request.user)
 
     return render(request, "cms/add-media.html", context)
 

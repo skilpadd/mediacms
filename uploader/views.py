@@ -64,9 +64,9 @@ class FineUploaderView(generic.FormView):
             self.upload.save()
             return self.make_response({"success": True})
 
-        # Get channel id if provided
-        channel_id = form.cleaned_data.get('channel')
-        channel = Channel.objects.filter(id=channel_id, user=self.request.user).first()
+        channel_ids = form.cleaned_data.get('channels')
+        if channel_ids:
+            channel_ids = [channel_id for channel_id in channel_ids.split(",")]
 
         # create media!
         media_file = os.path.join(settings.MEDIA_ROOT, self.upload.real_path)
@@ -76,8 +76,9 @@ class FineUploaderView(generic.FormView):
                                        user=self.request.user,
                                        title=self.upload.original_filename)
 
-            if channel:
-                new.channels.add(channel)
+            if channel_ids:
+                channels = Channel.objects.filter(id__in=channel_ids, user=self.request.user)
+                new.channels.add(*channels)
 
         rm_file(media_file)
         shutil.rmtree(os.path.join(settings.MEDIA_ROOT, self.upload.file_path))

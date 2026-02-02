@@ -1,0 +1,138 @@
+.channel-widget {
+    margin:10px 0
+}
+
+.channel-content {
+    display: flex;
+    gap: 20px
+}
+
+.channel-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0
+}
+
+.channel-panel h3 {
+    margin: 0 0 12px;
+    font-size: 16px;
+    font-weight: normal;
+    color: #333
+}
+
+.channel-search {
+    width:100%;
+    padding:8px 12px;
+    margin-bottom: 12px;
+    border:1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box
+}
+
+.channel-list {
+    border:1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px;
+    background: #f9f9f9;
+    min-height: 120px;
+    max-height:200px
+}
+
+.channel-list.scrollable {
+    overflow-y: auto
+}
+
+.channel-list::-webkit-scrollbar {
+    width:8px
+}
+
+.channel-list::-webkit-scrollbar-track {
+    background:#f1f1f1;border-radius:4px
+}
+
+.channel-list::-webkit-scrollbar-thumb {
+    background:#ccc;border-radius:4px
+}
+
+.channel-list::-webkit-scrollbar-thumb:hover {
+    background:#aaa
+}
+
+.channel-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 10px;
+    margin-bottom: 4px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition:all .2s
+}
+
+.channel-item:hover {
+    background: #f0f7ff;
+    border-color: #007bff
+}
+
+.channel-item span {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap
+}
+
+.channel-item button {
+    background: none;
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all .2s
+}
+
+.channel-item .add-btn {
+    color: #28a745
+}
+
+.channel-item .add-btn:hover {
+    background:rgba(40,167,69,.1)
+}
+
+.channel-item .remove-btn {
+    color:#dc3545
+}
+
+.channel-item .remove-btn:hover {
+    background:rgba(220,53,69,.1)
+}
+
+.empty-message {
+    padding:30px 15px;
+    text-align: center;
+    color: #999;
+    font-size: 13px;
+    font-style: italic
+}
+
+@media (max-width:768px) {
+    .channel-content {
+        flex-direction: column;
+        gap: 16px
+    }
+
+    .channel-list {
+        max-height:150px
+    }
+}
