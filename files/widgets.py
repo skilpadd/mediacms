@@ -2,6 +2,7 @@ import json
 
 from django import forms
 from django.utils.safestring import mark_safe
+from users.models import Channel
 
 
 class CategoryModalWidget(forms.SelectMultiple):
@@ -49,9 +50,23 @@ class ChannelModalWidget(forms.SelectMultiple):
     def render(self, name, value, attrs=None, renderer=None):
         # Get all channels as JSON
         channels = []
+
+        channel_ids = [str(opt_value) for opt_value, _ in self.choices if opt_value]
+        channel_objs = {str(channel.pk): channel for channel in Channel.objects.filter(pk__in=channel_ids)}
+
         for opt_value, opt_label in self.choices:
             if opt_value:  # Skip empty choice
-                channels.append({'id': str(opt_value), 'title': str(opt_label)})
+                thumbnail = ''
+                title = str(opt_label)
+                try:
+                    channel = channel_objs.get(str(opt_value))
+                    if channel:
+                        thumbnail = channel.thumbnail_url()
+                        title = channel.title
+                except Channel.DoesNotExist:
+                    pass
+
+                channels.append({'id': str(opt_value), 'title': title, 'thumbnail': thumbnail})
 
         all_channels_json = json.dumps(channels)
         selected_ids_json = json.dumps([str(v) for v in (value or [])])

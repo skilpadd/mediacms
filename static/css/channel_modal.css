@@ -90,7 +90,7 @@
     border-color: #007bff
 }
 
-.channel-item span {
+.channel-item span:not(.channel-thumb) {
     flex: 1;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -146,4 +146,26 @@
     .channel-list {
         max-height:150px
     }
+}
+
+.channel-thumb {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
+    flex: 0 0 32px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #eee;
+    margin-right: 8px;
+}
+
+.channel-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
