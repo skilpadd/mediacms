@@ -187,6 +187,9 @@ export class SearchPage extends Page {
 
   pageContent() {
     const advancedFilters = PageStore.get('config-options').pages.search.advancedFilters;
+    const channelRequestUrl = this.state.validQuery && this.state.searchQuery 
+      ? ApiUrlContext._currentValue.channels + '?title=' + encodeURIComponent(this.state.searchQuery) 
+      : null;
 
     return (
       <MediaListWrapper
@@ -200,19 +203,37 @@ export class SearchPage extends Page {
 
         {advancedFilters ? null : <SearchMediaFiltersRow onFiltersUpdate={this.onFilterArgsUpdate} />}
 
-        {!this.state.validQuery ? null : (
-          <LazyLoadItemListAsync
-            key={this.state.requestUrl}
-            singleLinkContent={false}
-            horizontalItemsOrientation={true}
-            itemsCountCallback={this.getCountFunc}
-            requestUrl={this.state.requestUrl}
-            preferSummary={true}
-            hideViews={!PageStore.get('config-media-item').displayViews}
-            hideAuthor={!PageStore.get('config-media-item').displayAuthor}
-            hideDate={!PageStore.get('config-media-item').displayPublishDate}
-          />
-        )}
+        {channelRequestUrl ? (
+          <div className="channel-search-results">
+            <h2 className="search-section-title">{translateString("Channels")}</h2>
+            <LazyLoadItemListAsync
+              key={"channels-" + channelRequestUrl}
+              singleLinkContent={false}
+              horizontalItemsOrientation={true}
+              requestUrl={channelRequestUrl}
+              hideViews={true}
+              hideAuthor={false}
+              hideDate={true}
+            />
+          </div>
+        ) : null}
+
+        {this.state.validQuery ? (
+          <div className="media-search-results">
+            <h2 className="search-section-title">{translateString("Media")}</h2>
+            <LazyLoadItemListAsync
+              key={this.state.requestUrl}
+              singleLinkContent={false}
+              horizontalItemsOrientation={true}
+              itemsCountCallback={this.getCountFunc}
+              requestUrl={this.state.requestUrl}
+              preferSummary={true}
+              hideViews={!PageStore.get('config-media-item').displayViews}
+              hideAuthor={!PageStore.get('config-media-item').displayAuthor}
+              hideDate={!PageStore.get('config-media-item').displayPublishDate}
+            />
+          </div>
+        ) : null}
       </MediaListWrapper>
     );
   }
