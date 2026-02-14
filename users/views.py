@@ -178,6 +178,7 @@ def edit_channel(request, friendly_token):
         if form.is_valid():
             channel = form.save(commit=False)
             channel.save()
+            form.save_m2m()
 
             for tag in channel.tags.all():
                 channel.tags.remove(tag)
@@ -536,6 +537,7 @@ class ChannelList(APIView):
             openapi.Parameter(name='title', type=openapi.TYPE_STRING, in_=openapi.IN_QUERY, description='Search by title'),
             openapi.Parameter(name='username', type=openapi.TYPE_STRING, in_=openapi.IN_QUERY, description='Search by username'),
             openapi.Parameter(name='t', type=openapi.TYPE_STRING, in_=openapi.IN_QUERY, description='Search by tag'),
+            openapi.Parameter(name='c', type=openapi.TYPE_STRING, in_=openapi.IN_QUERY, description='Search by category'),
         ],
         operation_summary='List channels',
         operation_description='Paginated listing of channels'
@@ -557,6 +559,10 @@ class ChannelList(APIView):
         tag = request.GET.get('t', '').strip()
         if tag:
             channels = channels.filter(tags__title=tag)
+
+        category = request.GET.get('c', '').strip()
+        if category:
+            channels = channels.filter(category__title__contains=category)
 
         page = paginator.paginate_queryset(channels, request)
 

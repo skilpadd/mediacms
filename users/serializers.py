@@ -168,6 +168,7 @@ class ChannelSerializer(serializers.ModelSerializer):
             'friendly_token',
             'author_profile',
             'tags_info',
+            'categories_info',
         ]
         fields = [
             'title',
@@ -182,4 +183,5 @@ class ChannelSerializer(serializers.ModelSerializer):
             'media_type',
             'friendly_token',
             'tags_info',
+            'categories_info',
         ]

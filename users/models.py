@@ -250,6 +250,7 @@ class Channel(models.Model):
     add_date = models.DateTimeField(auto_now_add=True, db_index=True)
     subscribers = models.ManyToManyField(User, related_name="subscriptions", blank=True)
     tags = models.ManyToManyField("files.Tag", blank=True, help_text="select one or more out of the existing tags")
+    category = models.ManyToManyField("files.Category", blank=True, help_text="Channel can be part of one or more categories")
     friendly_token = models.CharField(blank=True, max_length=12)
     banner_logo = ProcessedImageField(
         upload_to="userlogos/%Y/%m/%d",
@@ -315,6 +316,15 @@ class Channel(models.Model):
         ret = []
         for tag in self.tags.all():
             ret.append({"title": tag.title, "url": tag.get_absolute_url()})
+        return ret
+
+    @property
+    def categories_info(self):
+        """Property used on serializers"""
+
+        ret = []
+        for cat in self.category.all():
+            ret.append({"title": cat.title, "url": cat.get_absolute_url()})
         return ret
 
 

@@ -196,6 +196,9 @@ export class SearchPage extends Page {
       if (this.state.searchTags) {
         channelParams.push('t=' + encodeURIComponent(this.state.searchTags));
       }
+      if (this.state.searchCategories) {
+        channelParams.push('c=' + encodeURIComponent(this.state.searchCategories));
+      }
       if (channelParams.length) {
         channelRequestUrl = ApiUrlContext._currentValue.channels + '?' + channelParams.join('&');
       }

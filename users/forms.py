@@ -2,6 +2,7 @@ from django import forms
 from django.conf import settings
 
 from files.methods import is_mediacms_manager
+from files.widgets import CategoryModalWidget
 
 from .models import Channel, User
 
@@ -70,11 +71,12 @@ class ChannelForm(forms.ModelForm):
 
     class Meta:
         model = Channel
-        fields = ("title", "description", "banner_logo", "logo", "new_tags")
+        fields = ("title", "description", "banner_logo", "logo", "new_tags", "category")
         widgets = {
             "new_tags": MultipleSelect(),
             "banner_logo": forms.FileInput(),
             "logo": forms.FileInput(),
+            "category": CategoryModalWidget(),
         }
 
     def __init__(self, *args, **kwargs):
