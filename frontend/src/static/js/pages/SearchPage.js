@@ -19,6 +19,7 @@ export class SearchPage extends Page {
       filterArgs: '',
       resultsTitle: null,
       resultsCount: null,
+      channelResultCount: null,
       searchQuery: SearchFieldStore.get('search-query'),
       searchCategories: SearchFieldStore.get('search-categories'),
       searchTags: SearchFieldStore.get('search-tags'),
@@ -26,6 +27,7 @@ export class SearchPage extends Page {
     };
 
     this.getCountFunc = this.getCountFunc.bind(this);
+    this.getChannelCountFunc = this.getChannelCountFunc.bind(this);
 
     this.updateRequestUrl = this.updateRequestUrl.bind(this);
     this.onFilterArgsUpdate = this.onFilterArgsUpdate.bind(this);
@@ -185,6 +187,10 @@ export class SearchPage extends Page {
     );
   }
 
+  getChannelCountFunc(resultsCount) {
+    this.setState({ channelResultCount: resultsCount });
+  }
+
   pageContent() {
     const advancedFilters = PageStore.get('config-options').pages.search.advancedFilters;
     let channelRequestUrl = null;
@@ -216,13 +222,14 @@ export class SearchPage extends Page {
 
         {advancedFilters ? null : <SearchMediaFiltersRow onFiltersUpdate={this.onFilterArgsUpdate} />}
 
-        {channelRequestUrl ? (
+        {channelRequestUrl && this.state.channelResultCount !== 0 ? (
           <div className="channel-search-results">
             <h2 className="search-section-title">{translateString("Channels")}</h2>
             <LazyLoadItemListAsync
               key={"channels-" + channelRequestUrl}
               singleLinkContent={false}
               horizontalItemsOrientation={true}
+              itemsCountCallback={this.getChannelCountFunc}
               requestUrl={channelRequestUrl}
               hideViews={true}
               hideAuthor={false}
@@ -231,7 +238,7 @@ export class SearchPage extends Page {
           </div>
         ) : null}
 
-        {this.state.validQuery ? (
+        {this.state.validQuery && this.state.resultsCount !== 0 ? (
           <div className="media-search-results">
             <h2 className="search-section-title">{translateString("Media")}</h2>
             <LazyLoadItemListAsync
