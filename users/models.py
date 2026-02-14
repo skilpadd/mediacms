@@ -249,6 +249,7 @@ class Channel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, db_index=True, related_name="channels")
     add_date = models.DateTimeField(auto_now_add=True, db_index=True)
     subscribers = models.ManyToManyField(User, related_name="subscriptions", blank=True)
+    tags = models.ManyToManyField("files.Tag", blank=True, help_text="select one or more out of the existing tags")
     friendly_token = models.CharField(blank=True, max_length=12)
     banner_logo = ProcessedImageField(
         upload_to="userlogos/%Y/%m/%d",
@@ -306,6 +307,15 @@ class Channel(models.Model):
     @property
     def edit_url(self):
         return self.get_absolute_url(edit=True)
+
+    @property
+    def tags_info(self):
+        """Property used on serializers"""
+
+        ret = []
+        for tag in self.tags.all():
+            ret.append({"title": tag.title, "url": tag.get_absolute_url()})
+        return ret
 
 
 @receiver(post_save, sender=User)

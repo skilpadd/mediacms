@@ -61,11 +61,18 @@ class UserForm(forms.ModelForm):
             self.fields["name"].widget.attrs['readonly'] = True
 
 
+class MultipleSelect(forms.CheckboxSelectMultiple):
+    input_type = "checkbox"
+
+
 class ChannelForm(forms.ModelForm):
+    new_tags = forms.CharField(label="Tags", help_text="a comma separated list of tags.", required=False)
+
     class Meta:
         model = Channel
-        fields = ("title", "description", "banner_logo", "logo")
+        fields = ("title", "description", "banner_logo", "logo", "new_tags")
         widgets = {
+            "new_tags": MultipleSelect(),
             "banner_logo": forms.FileInput(),
             "logo": forms.FileInput(),
         }
@@ -74,6 +81,7 @@ class ChannelForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["banner_logo"].required = False
         self.fields["logo"].required = False
+        self.fields["new_tags"].initial = ", ".join([tag.title for tag in self.instance.tags.all()])
 
     def _validate_image_size(self, image):
         max_bytes = 15 * 1024 * 1024

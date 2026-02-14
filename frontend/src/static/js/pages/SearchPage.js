@@ -187,9 +187,19 @@ export class SearchPage extends Page {
 
   pageContent() {
     const advancedFilters = PageStore.get('config-options').pages.search.advancedFilters;
-    const channelRequestUrl = this.state.validQuery && this.state.searchQuery 
-      ? ApiUrlContext._currentValue.channels + '?title=' + encodeURIComponent(this.state.searchQuery) 
-      : null;
+    let channelRequestUrl = null;
+    if (this.state.validQuery) {
+      const channelParams = [];
+      if (this.state.searchQuery) {
+        channelParams.push('title=' + encodeURIComponent(this.state.searchQuery));
+      }
+      if (this.state.searchTags) {
+        channelParams.push('t=' + encodeURIComponent(this.state.searchTags));
+      }
+      if (channelParams.length) {
+        channelRequestUrl = ApiUrlContext._currentValue.channels + '?' + channelParams.join('&');
+      }
+    }
 
     return (
       <MediaListWrapper

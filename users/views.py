@@ -22,6 +22,8 @@ from rest_framework.views import APIView
 
 from cms.permissions import IsUserOrManager
 from files.methods import is_mediacms_editor, is_mediacms_manager
+from files.helpers import get_alphanumeric_only
+from files.models.category import Tag
 
 from .forms import ChannelForm, UserForm
 from .models import Channel, User
@@ -176,6 +178,20 @@ def edit_channel(request, friendly_token):
         if form.is_valid():
             channel = form.save(commit=False)
             channel.save()
+
+            for tag in channel.tags.all():
+                channel.tags.remove(tag)
+            if form.cleaned_data.get("new_tags"):
+                for tag in form.cleaned_data.get("new_tags").split(","):
+                    tag = get_alphanumeric_only(tag)
+                    tag = tag[:99]
+                    if tag:
+                        try:
+                            tag = Tag.objects.get(title=tag)
+                        except Tag.DoesNotExist:
+                            tag = Tag.objects.create(title=tag, user=request.user)
+                        if tag not in channel.tags.all():
+                            channel.tags.add(tag)
             return HttpResponseRedirect(request.user.get_absolute_url())
     else:
         form = ChannelForm(instance=channel)
@@ -518,7 +534,8 @@ class ChannelList(APIView):
         manual_parameters=[
             openapi.Parameter(name='page', type=openapi.TYPE_INTEGER, in_=openapi.IN_QUERY, description='Page number'),
             openapi.Parameter(name='title', type=openapi.TYPE_STRING, in_=openapi.IN_QUERY, description='Search by title'),
-            openapi.Parameter(name='username', type=openapi.TYPE_STRING, in_=openapi.IN_QUERY, description='Search by username')
+            openapi.Parameter(name='username', type=openapi.TYPE_STRING, in_=openapi.IN_QUERY, description='Search by username'),
+            openapi.Parameter(name='t', type=openapi.TYPE_STRING, in_=openapi.IN_QUERY, description='Search by tag'),
         ],
         operation_summary='List channels',
         operation_description='Paginated listing of channels'
@@ -536,6 +553,10 @@ class ChannelList(APIView):
         if username:
             user = get_object_or_404(User, username__iexact=username)
             channels = channels.filter(user=user)
+
+        tag = request.GET.get('t', '').strip()
+        if tag:
+            channels = channels.filter(tags__title=tag)
 
         page = paginator.paginate_queryset(channels, request)
 
