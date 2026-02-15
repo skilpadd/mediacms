@@ -195,10 +195,10 @@ class MediaList(APIView):
                 media = Media.objects.filter(channels=channel).prefetch_related("user", "tags")
             else:
                 base_queryset = Media.objects.prefetch_related("user", "tags")
-                base_filters = Q(listable=True)
+                base_filters = Q(listable=True, channels=channel)
 
                 if not request.user.is_authenticated:
-                    media = base_queryset.filter(base_filters)
+                    media = base_queryset.filter(base_filters, channels=channel)
                 else:
                     conditions = base_filters
                     permissions_filter = {'user': request.user}
