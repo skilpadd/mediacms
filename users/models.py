@@ -287,7 +287,10 @@ class Channel(models.Model):
         super(Channel, self).save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.user.username} -{self.title}"
+        if hasattr(self, 'user'):
+            return f"{self.user.username} - {self.title}"
+        else:
+            return self.title
 
     def get_absolute_url(self, edit=False):
         if edit:
