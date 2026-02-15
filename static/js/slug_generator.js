@@ -8,10 +8,6 @@ function initSlugGenerator(titleFieldId, slugFieldId) {
 
     let slugManuallyEdited = false;
 
-    if (slugInput.value.trim() !== '') {
-        slugManuallyEdited = true;
-    }
-
     slugInput.addEventListener('input', () => {
         slugManuallyEdited = true;
     })

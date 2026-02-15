@@ -8,6 +8,17 @@
 <link href="{% static "css/edit-forms.css" %}?v={{ VERSION }}" rel="preload" as="style">
 <link href="{% static "css/edit-forms.css" %}?v={{ VERSION }}" rel="stylesheet">
 {{ form.media }}
+<script src="{% static "js/slug_generator.js" %}"></script>
+<script>
+	const titleFieldId = '#id_title';
+	const slugFieldId = '#id_friendly_token';
+
+	document.addEventListener('DOMContentLoaded', () => {
+	if (document.querySelector(titleFieldId) && document.querySelector(slugFieldId)) {
+		initSlugGenerator(titleFieldId, slugFieldId);
+	}
+    });
+</script>
 {%endblock topimports %}
 
 {% block innercontent %}
