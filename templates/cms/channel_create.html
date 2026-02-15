@@ -1,10 +1,22 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
+{% load static %}
 
 {% block headtitle %}Create channel - {{PORTAL_NAME}}{% endblock headtitle %}
 
 {% block topimports %}
 {{ form.media }}
+<script src="{% static "js/slug_generator.js" %}"></script>
+<script>
+	const titleFieldId = '#id_title';
+	const slugFieldId = '#id_friendly_token';
+
+	document.addEventListener('DOMContentLoaded', () => {
+	if (document.querySelector(titleFieldId) && document.querySelector(slugFieldId)) {
+		initSlugGenerator(titleFieldId, slugFieldId);
+	}
+    });
+</script>
 {% endblock topimports %}
 
 {% block innercontent %}
