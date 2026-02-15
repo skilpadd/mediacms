@@ -147,7 +147,13 @@ export function listItemProps(props, item, index) {
     }
   }
 
-  const author = {
+  const firstChannel = item.channels_info && item.channels_info.length > 0 ? item.channels_info[0] : null;
+  const channel = firstChannel ? {
+    name: firstChannel.title,
+    url: firstChannel.url.replace(' ', '%20')
+  }: null;
+
+  const author = channel || {
     name: item.author_name || item.user,
     url: item.author_profile ? item.author_profile.replace(' ', '%20') : null,
   };
