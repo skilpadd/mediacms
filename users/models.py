@@ -251,7 +251,7 @@ class Channel(models.Model):
     subscribers = models.ManyToManyField(User, related_name="subscriptions", blank=True)
     tags = models.ManyToManyField("files.Tag", blank=True, help_text="select one or more out of the existing tags")
     category = models.ManyToManyField("files.Category", blank=True, help_text="Channel can be part of one or more categories")
-    friendly_token = models.CharField(blank=True, max_length=12)
+    friendly_token = models.CharField(blank=True, max_length=100, unique=True)
     banner_logo = ProcessedImageField(
         upload_to="userlogos/%Y/%m/%d",
         processors=[ResizeToFill(900, 200)],

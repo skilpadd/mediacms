@@ -71,21 +71,51 @@ class ChannelForm(forms.ModelForm):
 
     class Meta:
         model = Channel
-        fields = ("title", "description", "banner_logo", "logo", "new_tags", "category")
+        fields = ("title", "friendly_token", "description", "banner_logo", "logo", "new_tags", "category")
         widgets = {
             "new_tags": MultipleSelect(),
             "banner_logo": forms.FileInput(),
             "logo": forms.FileInput(),
             "category": CategoryModalWidget(),
         }
+        labels = {
+            "friendly_token": "Slug",
+        }
+        help_texts = {
+            "friendly_token": "Channel URL slug. Only letters, numbers, hyphens and underscores.",
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["banner_logo"].required = False
         self.fields["logo"].required = False
+        self.fields["friendly_token"].required = False
 
         if self.instance and self.instance.pk:
             self.fields["new_tags"].initial = ", ".join([tag.title for tag in self.instance.tags.all()])
+
+    def clean_friendly_token(self):
+        token = self.cleaned_data.get("friendly_token", "").strip()
+        if token:
+            if not all(c.isalnum() or c in "-_" for c in token):
+                raise forms.ValidationError(
+                    "Slug can only contain alphanumeric characters, underscores or hyphens."
+                )
+
+            query_slug = Channel.objects.filter(friendly_token=token)
+            if self.instance and self.instance.pk:
+                query_slug = query_slug.exclude(pk=self.instance.pk)
+            if query_slug.exists():
+                raise forms.ValidationError(
+                    "This slug is already in use. Please choose a different one."
+                )
+
+            return token
+
+        if self.instance and self.instance.pk:
+            return self.instance.friendly_token
+
+        return token
 
     def _validate_image_size(self, image):
         max_bytes = 15 * 1024 * 1024
