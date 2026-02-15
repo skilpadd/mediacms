@@ -161,6 +161,20 @@ def create_channel(request):
             channel = form.save(commit=False)
             channel.user = request.user
             channel.save()
+            form.save_m2m()
+
+            if form.cleaned_data.get("new_tags"):
+                for tag in form.cleaned_data.get("new_tags").split(","):
+                    tag = get_alphanumeric_only(tag)
+                    tag = tag[:99]
+                    if tag:
+                        try:
+                            tag = Tag.objects.get(title=tag)
+                        except Tag.DoesNotExist:
+                            tag = Tag.objects.create(title=tag, user=request.user)
+                        if tag not in channel.tags.all():
+                            channel.tags.add(tag)
+
             return HttpResponseRedirect(channel.get_absolute_url())
     else:
         form = ChannelForm()

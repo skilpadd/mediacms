@@ -83,7 +83,9 @@ class ChannelForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["banner_logo"].required = False
         self.fields["logo"].required = False
-        self.fields["new_tags"].initial = ", ".join([tag.title for tag in self.instance.tags.all()])
+
+        if self.instance and self.instance.pk:
+            self.fields["new_tags"].initial = ", ".join([tag.title for tag in self.instance.tags.all()])
 
     def _validate_image_size(self, image):
         max_bytes = 15 * 1024 * 1024
