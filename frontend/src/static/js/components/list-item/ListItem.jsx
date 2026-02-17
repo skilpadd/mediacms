@@ -12,36 +12,8 @@ import { UserItem } from './UserItem';
 import { ChannelItem } from './ChannelItem';
 
 function extractPlaylistId() {
-  let playlistId = null;
-
-  const getParamsString = window.location.search;
-
-  if ('' !== getParamsString) {
-    let tmp = getParamsString.split('?');
-
-    if (2 === tmp.length) {
-      tmp = tmp[1].split('&');
-
-      let x;
-
-      let i = 0;
-      while (i < tmp.length) {
-        x = tmp[i].split('=');
-
-        if ('pl' === x[0]) {
-          if (2 === x.length) {
-            playlistId = x[1];
-          }
-
-          break;
-        }
-
-        i += 1;
-      }
-    }
-  }
-
-  return playlistId;
+  const match = window.location.pathname.match(/\/playlist\/([\w_-]+)/);
+  return match ? match[1] : null;
 }
 
 function itemPageLink(props, item) {
@@ -56,11 +28,11 @@ function itemPageLink(props, item) {
   const playlistId = extractPlaylistId();
 
   if (props.inPlaylistView && playlistId) {
-    return item.url + '?pl=' + playlistId;
+    return item.url + '/playlist/' + playlistId;
   }
 
   if (void 0 !== props.playlistId && null !== props.playlistId) {
-    return item.url + '?pl=' + props.playlistId;
+    return item.url + '/playlist/' + props.playlistId;
   }
 
   return item.url;

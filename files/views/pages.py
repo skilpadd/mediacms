@@ -681,9 +681,12 @@ def upload_media(request):
     return render(request, "cms/add-media.html", context)
 
 
-def view_media(request, friendly_token):
+def view_media(request, friendly_token, playlist_token=None):
     """View media view"""
     context = {}
+    if playlist_token:
+        context["playlist_token"] = playlist_token
+
     media = Media.objects.filter(friendly_token=friendly_token).first()
     if not media:
         context["media"] = None

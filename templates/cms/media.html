@@ -141,5 +141,8 @@
 {% endblock content %}
 
 {% block bottomimports %}
+    {% if playlist_token %}
+        <script>window.MediaCMS.playlistId = "{{ playlist_token }}";</script>
+    {% endif %}
     <script src="{% static "js/media.js" %}?v={{ VERSION }}"></script>
 {% endblock bottomimports %}

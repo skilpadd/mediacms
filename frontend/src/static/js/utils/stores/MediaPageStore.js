@@ -7,36 +7,8 @@ import UrlParse from 'url-parse';
 import PageStore from './PageStore.js';
 
 function extractPlaylistId() {
-  let playlistId = null;
-
-  const getParamsString = window.location.search;
-
-  if ('' !== getParamsString) {
-    let tmp = getParamsString.split('?');
-
-    if (2 === tmp.length) {
-      tmp = tmp[1].split('&');
-
-      let x;
-
-      let i = 0;
-      while (i < tmp.length) {
-        x = tmp[i].split('=');
-
-        if ('pl' === x[0]) {
-          if (2 === x.length) {
-            playlistId = x[1];
-          }
-
-          break;
-        }
-
-        i += 1;
-      }
-    }
-  }
-
-  return playlistId;
+  const match = window.location.pathname.match(/\/playlist\/([\w_-]+)/);
+  return match ? match[1] : null;
 }
 
 const MediaPageStoreData = {};
@@ -567,7 +539,7 @@ class MediaPageStore extends EventEmitter {
         }
 
         if (void 0 !== this.pagePlaylistData.playlist_media[nextItem]) {
-          r = this.pagePlaylistData.playlist_media[nextItem].url + '&pl=' + this.pagePlaylistId;
+          r = this.pagePlaylistData.playlist_media[nextItem].url + '/playlist/' + this.pagePlaylistId;
         }
 
         break;
@@ -600,7 +572,7 @@ class MediaPageStore extends EventEmitter {
         }
 
         if (void 0 !== this.pagePlaylistData.playlist_media[previousItem]) {
-          r = this.pagePlaylistData.playlist_media[previousItem].url + '&pl=' + this.pagePlaylistId;
+          r = this.pagePlaylistData.playlist_media[previousItem].url + '/playlist/' + this.pagePlaylistId;
         }
 
         break;

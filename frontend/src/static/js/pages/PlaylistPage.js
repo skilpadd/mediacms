@@ -19,22 +19,9 @@ import '../components/playlist-page/PlaylistPage.scss';
 
 if (window.MediaCMS.site.devEnv) {
   const extractUrlParams = () => {
-    let mediaId = null;
-    let playlistId = null;
-
-    const query = window.location.search.split('?')[1];
-
-    if (query) {
-      const params = query.split('&');
-      params.forEach((param) => {
-        if (0 === param.indexOf('m=')) {
-          mediaId = param.split('m=')[1];
-        } else if (0 === param.indexOf('pl=')) {
-          playlistId = param.split('pl=')[1];
-        }
-      });
-    }
-
+    const pathMatch = window.location.pathname.match(/\/playlist\/([\w_-]+)/);
+    const playlistId = pathMatch ? pathMatch[1] : null;
+    const mediaId = window.MediaCMS.mediaId || null;
     return { mediaId, playlistId };
   };
 
@@ -57,7 +44,7 @@ function PlayAllLink(props) {
     playAllUrl = '/media.html?' + playAllUrl.split('view?')[1];
   }
 
-  playAllUrl += '?pl=' + props.id;
+  playAllUrl += '/playlist/' + props.id;
 
   return !props.media || !props.media.length ? (
     <span>{props.children}</span>
