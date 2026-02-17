@@ -56,11 +56,11 @@ function itemPageLink(props, item) {
   const playlistId = extractPlaylistId();
 
   if (props.inPlaylistView && playlistId) {
-    return item.url + '&pl=' + playlistId;
+    return item.url + '?pl=' + playlistId;
   }
 
   if (void 0 !== props.playlistId && null !== props.playlistId) {
-    return item.url + '&pl=' + props.playlistId;
+    return item.url + '?pl=' + props.playlistId;
   }
 
   return item.url;
@@ -78,12 +78,12 @@ export function listItemProps(props, item, index) {
 
   const url = {
     view: itemPageLink(props, item),
-    edit: props.canEdit ? item.url.replace('view?m=', 'edit?m=') : null,
-    publish: props.canEdit ? item.url.replace('view?m=', 'publish?m=') : null,
+    edit: props.canEdit ? item.url.replace('/view/', '/edit/') : null,
+    publish: props.canEdit ? item.url.replace('/view/', '/publish/') : null,
   };
 
-  if (window.MediaCMS.site.devEnv && -1 < url.view.indexOf('view?')) {
-    url.view = '/media.html?' + url.view.split('view?')[1];
+  if (window.MediaCMS.site.devEnv && -1 < url.view.indexOf('view/')) {
+    url.view = '/media.html?m=' + url.view.split('view/')[1];
   }
 
   const thumbnail = item.thumbnail_url || '';

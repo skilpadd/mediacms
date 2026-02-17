@@ -59,7 +59,7 @@ export function MediaItemVideo(props) {
   }
 
   function playlistOptionsComponent() {
-    let mediaId = props.link.split('=')[1];
+    let mediaId = props.link.split('/').pop().split('?')[0];
     mediaId = mediaId.split('&')[0];
     return props.hidePlaylistOptions ? null : (
       <MediaPlaylistOptions key="options" media_id={mediaId} playlist_id={props.playlist_id} />
