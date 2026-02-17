@@ -83,7 +83,7 @@ class IndexRSSFeed(Feed):
         return item.edit_date
 
     def item_link(self, item):
-        return f"{reverse('get_media')}?m={item.friendly_token}"
+        return reverse('get_media', kwargs={'friendly_token': item.friendly_token})
 
     def item_extra_kwargs(self, item):
         item = {
@@ -151,7 +151,7 @@ class SearchRSSFeed(Feed):
         return item.edit_date
 
     def item_link(self, item):
-        return f"{reverse('get_media')}?m={item.friendly_token}"
+        return reverse('get_media', kwargs={'friendly_token': item.friendly_token})
 
     def item_extra_kwargs(self, item):
         item = {

@@ -195,7 +195,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             spinner.style.display = 'none';
             console.log('Upload successful:', data);
             if (data.friendly_token) {
-                window.location.href = '/view?m=' + data.friendly_token;
+                window.location.href = '/view/' + data.friendly_token;
             }
         })
         .catch(error => {

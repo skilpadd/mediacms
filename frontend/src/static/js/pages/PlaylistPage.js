@@ -57,7 +57,7 @@ function PlayAllLink(props) {
     playAllUrl = '/media.html?' + playAllUrl.split('view?')[1];
   }
 
-  playAllUrl += '&pl=' + props.id;
+  playAllUrl += '?pl=' + props.id;
 
   return !props.media || !props.media.length ? (
     <span>{props.children}</span>

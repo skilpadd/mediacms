@@ -50,7 +50,7 @@
 	</url>
 	{% for media_object in media %}
 	<url>
-		<loc>{{ FRONTEND_HOST}}/view?m={{ media_object.friendly_token }}</loc>
+		<loc>{{ FRONTEND_HOST}}/view/{{ media_object.friendly_token }}</loc>
 	</url>
 	{% endfor %}
 	{% for playlist_object in playlists %}
@@ -61,6 +61,11 @@
 	{% for user_object in users %}
 	<url>
 		<loc>{{ FRONTEND_HOST}}/user/{{ user_object.username }}/</loc>
+	</url>
+	{% endfor %}
+	{% for channel in channels %}
+	<url>
+		<loc>{{ FRONTEND_HOST}}/channel/{{ channel.friendly_token }}</loc>
 	</url>
 	{% endfor %}
 </urlset>

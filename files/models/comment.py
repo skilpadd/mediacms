@@ -39,7 +39,7 @@ class Comment(MPTTModel):
         super(Comment, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return f"{reverse('get_media')}?m={self.media.friendly_token}"
+        return reverse('get_media', kwargs={'friendly_token': self.media.friendly_token})
 
     @property
     def media_url(self):

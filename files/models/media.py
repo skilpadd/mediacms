@@ -939,11 +939,11 @@ class Media(models.Model):
 
     def get_absolute_url(self, api=False, edit=False):
         if edit:
-            return f"{reverse('edit_media')}?m={self.friendly_token}"
+            return reverse('edit_media', kwargs={'friendly_token': self.friendly_token})
         if api:
             return reverse("api_get_media", kwargs={"friendly_token": self.friendly_token})
         else:
-            return f"{reverse('get_media')}?m={self.friendly_token}"
+            return reverse('get_media', kwargs={"friendly_token": self.friendly_token})
 
     @property
     def edit_url(self):
@@ -951,7 +951,7 @@ class Media(models.Model):
 
     @property
     def add_subtitle_url(self):
-        return f"/add_subtitle?m={self.friendly_token}"
+        return f"/add_subtitle/{self.friendly_token}"
 
     @property
     def ratings_info(self):

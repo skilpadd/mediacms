@@ -694,9 +694,9 @@ class EndScreenOverlay extends Component {
             const isEmbedPlayer = this.player().id() === 'video-embed' || window.parent !== window;
 
             if (isEmbedPlayer) {
-                window.open(`/view?m=${video.id}`, '_blank', 'noopener,noreferrer');
+                window.open(`/view/${video.id}`, '_blank', 'noopener,noreferrer');
             } else {
-                window.location.href = `/view?m=${video.id}`;
+                window.location.href = `/view/${video.id}`;
             }
         };
 

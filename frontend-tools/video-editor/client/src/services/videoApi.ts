@@ -166,7 +166,7 @@ export const trimVideo = async (mediaId: string, data: TrimVideoRequest): Promis
                 return {
                     status: 200, // Mock success status
                     msg: 'Video Processed Successfully', // Updated per requirements
-                    url_redirect: `./view?m=${mediaId}`,
+                    url_redirect: `./view/${mediaId}`,
                 };
             }
         }
@@ -176,7 +176,7 @@ export const trimVideo = async (mediaId: string, data: TrimVideoRequest): Promis
         return {
             status: 200,
             msg: 'Video Processed Successfully', // Ensure the success message is correct
-            url_redirect: jsonResponse.url_redirect || `./view?m=${mediaId}`,
+            url_redirect: jsonResponse.url_redirect || `./view/${mediaId}`,
             ...jsonResponse,
         };
     } catch (error) {
@@ -185,7 +185,7 @@ export const trimVideo = async (mediaId: string, data: TrimVideoRequest): Promis
         return {
             status: 200, // Mock success status
             msg: 'Video Processed Successfully', // Consistent with requirements
-            url_redirect: `./view?m=${mediaId}`,
+            url_redirect: `./view/${mediaId}`,
         };
     }
 
@@ -194,7 +194,7 @@ export const trimVideo = async (mediaId: string, data: TrimVideoRequest): Promis
     setTimeout(() => {
       resolve({
         msg: "Video is processing for trim",
-        url_redirect: `./view?m=${mediaId}`
+        url_redirect: `./view/${mediaId}`
       });
     }, 1500); // Simulate 1.5 second server delay
   });

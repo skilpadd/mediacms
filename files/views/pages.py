@@ -86,10 +86,8 @@ def setlanguage(request):
 
 
 @login_required
-def add_subtitle(request):
+def add_subtitle(request, friendly_token):
     """Add subtitle view"""
-
-    friendly_token = request.GET.get("m", "").strip()
     if not friendly_token:
         return HttpResponseRedirect("/")
 
@@ -286,10 +284,8 @@ def video_chapters(request, friendly_token):
 
 
 @login_required
-def edit_media(request):
+def edit_media(request, friendly_token):
     """Edit a media view"""
-
-    friendly_token = request.GET.get("m", "").strip()
     if not friendly_token:
         return HttpResponseRedirect("/")
     media = Media.objects.filter(friendly_token=friendly_token).first()
@@ -332,10 +328,8 @@ def edit_media(request):
 
 
 @login_required
-def publish_media(request):
+def publish_media(request, friendly_token):
     """Publish media"""
-
-    friendly_token = request.GET.get("m", "").strip()
     if not friendly_token:
         return HttpResponseRedirect("/")
     media = Media.objects.filter(friendly_token=friendly_token).first()
@@ -367,13 +361,12 @@ def publish_media(request):
 
 
 @login_required
-def replace_media(request):
+def replace_media(request, friendly_token):
     """Replace media file"""
 
     if not getattr(settings, 'ALLOW_MEDIA_REPLACEMENT', False):
         return HttpResponseRedirect("/")
 
-    friendly_token = request.GET.get("m", "").strip()
     if not friendly_token:
         return HttpResponseRedirect("/")
     media = Media.objects.filter(friendly_token=friendly_token).first()
@@ -437,9 +430,8 @@ def replace_media(request):
 
 
 @login_required
-def edit_chapters(request):
+def edit_chapters(request, friendly_token):
     """Edit chapters"""
-    friendly_token = request.GET.get("m", "").strip()
     if not friendly_token:
         return HttpResponseRedirect("/")
     media = Media.objects.filter(friendly_token=friendly_token).first()
@@ -492,10 +484,8 @@ def trim_video(request, friendly_token):
 
 
 @login_required
-def edit_video(request):
+def edit_video(request, friendly_token):
     """Edit video"""
-
-    friendly_token = request.GET.get("m", "").strip()
     if not friendly_token:
         return HttpResponseRedirect("/")
     media = Media.objects.filter(friendly_token=friendly_token).first()
@@ -538,10 +528,8 @@ def edit_video(request):
     )
 
 
-def embed_media(request):
+def embed_media(request, friendly_token):
     """Embed media view"""
-
-    friendly_token = request.GET.get("m", "").strip()
     if not friendly_token:
         return HttpResponseRedirect("/")
 
@@ -693,10 +681,8 @@ def upload_media(request):
     return render(request, "cms/add-media.html", context)
 
 
-def view_media(request):
+def view_media(request, friendly_token):
     """View media view"""
-
-    friendly_token = request.GET.get("m", "").strip()
     context = {}
     media = Media.objects.filter(friendly_token=friendly_token).first()
     if not media:

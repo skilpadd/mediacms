@@ -527,7 +527,7 @@ const TimelineControls = ({
                 // Set redirect URL to media page
                 const mediaId = (typeof window !== 'undefined' && (window as any).MEDIA_DATA?.mediaId) || null;
                 if (mediaId) {
-                    setRedirectUrl(`/view?m=${mediaId}`);
+                    setRedirectUrl(`/view/${mediaId}`);
                 }
 
                 setShowSuccessModal(true);
