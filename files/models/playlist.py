@@ -3,6 +3,7 @@ import uuid
 from django.db import models
 from django.urls import reverse
 from django.utils.html import strip_tags
+from django.utils.text import slugify
 
 from .. import helpers
 
@@ -14,7 +15,7 @@ class Playlist(models.Model):
 
     description = models.TextField(blank=True, help_text="description")
 
-    friendly_token = models.CharField(blank=True, max_length=12, db_index=True)
+    friendly_token = models.SlugField(blank=True, max_length=150, db_index=True, unique=True)
 
     media = models.ManyToManyField("Media", through="playlistmedia", blank=True)
 
@@ -67,11 +68,27 @@ class Playlist(models.Model):
         self.title = self.title[:100]
 
         if not self.friendly_token:
-            while True:
-                friendly_token = helpers.produce_friendly_token()
-                if not Playlist.objects.filter(friendly_token=friendly_token):
-                    self.friendly_token = friendly_token
-                    break
+            if self.title:
+                slugged_title = slugify(self.title)
+                slug = slugged_title
+                counter = 1
+
+                query_slug = Playlist.objects.all()
+                if self.pk:
+                    query_slug = query_slug.exclude(pk=self.pk)
+                while query_slug.filter(friendly_token=slug).exists():
+                    slug = f'{slugged_title}-{counter}'
+                    counter += 1
+
+                self.friendly_token = slug
+
+            if not self.friendly_token:
+                while True:
+                    friendly_token = helpers.produce_friendly_token()
+                    if not Playlist.objects.filter(friendly_token=friendly_token):
+                        self.friendly_token = friendly_token
+                        break
+
         super(Playlist, self).save(*args, **kwargs)
 
     @property
