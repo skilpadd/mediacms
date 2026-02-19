@@ -287,11 +287,30 @@ class PlaylistSerializer(serializers.ModelSerializer):
 
 class PlaylistDetailSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source="user.username")
+    friendly_token = serializers.SlugField(required=False, allow_blank=True, max_length=150)
 
     class Meta:
         model = Playlist
         read_only_fields = ("add_date", "user")
-        fields = ("title", "add_date", "user_thumbnail_url", "description", "user", "media_count", "url", "thumbnail_url")
+        fields = ("title", "add_date", "user_thumbnail_url", "description", "user", "media_count", "url", "thumbnail_url", "friendly_token")
+
+    def validate_friendly_token(self, value):
+        value = value.strip()
+        if value:
+            if not all(c.isalnum() or c in "-_" for c in value):
+                raise serializers.ValidationError("Slug can only contain alphanumeric characters, underscores or hyphens.")
+            query_set = Playlist.objects.filter(friendly_token=value)
+            if self.instance:
+                query_set = query_set.exclude(pk=self.instance.pk)
+            if query_set.exists():
+                raise serializers.ValidationError("This sug is already in use.")
+        return value
+
+    def update(self, instance, validated_data):
+        token = validated_data.get("friendly_token", '').strip()
+        if not token:
+            validated_data.pop("friendly_token", None)
+        return super().update(instance, validated_data)
 
 
 class CommentSerializer(serializers.ModelSerializer):

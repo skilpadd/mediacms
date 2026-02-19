@@ -12,11 +12,13 @@ export function PlaylistCreationForm(props) {
 
   const descriptionRef = useRef(null);
   const descriptionInputRef = useRef(null);
+  const slugInputRef = useRef(null);
 
   const [id, setId] = useState(props.id || null);
   const [title, setTitle] = useState(props.id ? PlaylistPageStore.get('title') : '');
   const [description, setDescription] = useState(props.id ? PlaylistPageStore.get('description') : '');
   const [descriptionLineHeight, setDescriptionLineHeight] = useState(-1);
+  const [slug, setSlug] = useState(props.id ? PlaylistPageStore.get('friendly_token') : '');
   /*const [ selectedPrivacy, setSelectedPrivacy ] = useState( 'public' );*/
 
   function onFocusDescription() {
@@ -37,6 +39,10 @@ export function PlaylistCreationForm(props) {
 
   function onChangeTitle() {
     setTitle(nameInputRef.current.value);
+  }
+
+  function onChageSlug() {
+    setSlug(slugInputRef.current.value);
   }
 
   /*function onPrivacyChoose(e){
@@ -69,6 +75,7 @@ export function PlaylistCreationForm(props) {
         PlaylistPageActions.updatePlaylist({
           title: title,
           description: description,
+          friendly_token: slug,
           // privacy: selectedPrivacy,
         });
       } else {
@@ -154,6 +161,19 @@ export function PlaylistCreationForm(props) {
           onBlur={onBlurDescription}
         ></textarea>
       </div>
+
+      {id ? (
+        <div className="playlist-form-field playlist-slug">
+          <span className="playlist-form-label">Slug</span>
+          <input
+            ref={slugInputRef}
+            type="text"
+            placeholder="Enter playlist slug.."
+            value={slug}
+            onChange={onChageSlug}
+          />
+        </div>
+      ) : null}
 
       {/*<div className="playlist-form-field playlist-privacy">
 					<span className="playlist-form-label">Privacy</span>

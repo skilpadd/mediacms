@@ -75,6 +75,8 @@ class PlaylistPageStore extends EventEmitter {
       case 'playlistId':
         return PlaylistPageStoreData[this.id].playlistId || null;
         break;
+      case 'friendly_token':
+        return PlaylistPageStoreData[this.id].data.friendly_token || '';
       case 'logged-in-user-playlist':
         return (
           !this.mediacms_config.member.is.anonymous &&
@@ -147,6 +149,7 @@ class PlaylistPageStore extends EventEmitter {
     if (response && response.data) {
       PlaylistPageStoreData[this.id].data.title = response.data.title;
       PlaylistPageStoreData[this.id].data.description = response.data.description;
+      PlaylistPageStoreData[this.id].data.friendly_token = response.data.friendly_token;
       this.emit('playlist_update_completed', response.data);
     }
   }
@@ -188,6 +191,7 @@ class PlaylistPageStore extends EventEmitter {
           {
             title: action.playlist_data.title,
             description: action.playlist_data.description,
+            friendly_token: action.playlist_data.friendly_token,
           },
           {
             headers: {

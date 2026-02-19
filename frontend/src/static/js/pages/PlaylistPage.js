@@ -201,6 +201,12 @@ function PlaylistEdit(props) {
     setTimeout(function () {
       PageActions.addNotification('Playlist updated', 'playlistUpdateCompleted');
       onClickExit();
+
+      const currentToken = window.location.pathname.split('/').pop();
+      if (new_playlist_data.friendly_token && new_playlist_data.friendly_token !== currentToken) {
+        const newUrl = window.location.pathname.replace(currentToken, new_playlist_data.friendly_token);
+        window.location.href = newUrl;
+      }
     }, 100);
   }
 
