@@ -7,9 +7,9 @@ DEBUG = False
 
 # PORTAL NAME, this is the portal title and
 # is also shown on several places as emails
-PORTAL_NAME = "MediaCMS"
+PORTAL_NAME = "cloudloop"
 PORTAL_DESCRIPTION = ""
-TIME_ZONE = "Europe/London"
+TIME_ZONE = "Europe/Moscow"
 
 # who can add media
 # valid options include 'all', 'email_verified', 'advancedUser'

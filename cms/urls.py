@@ -33,6 +33,6 @@ urlpatterns = [
     path("tinymce/", include("tinymce.urls")),
 ]
 
-admin.site.site_header = "MediaCMS Admin"
-admin.site.site_title = "MediaCMS"
+admin.site.site_header = "cloudloop Admin"
+admin.site.site_title = "cloudloop"
 admin.site.index_title = "Admin"
