@@ -43,10 +43,16 @@
 
 <div class="custom-page-wrapper">
 	{% comment %}<h2>{{ "About" | custom_translate:LANGUAGE_CODE}}</h2>{% endcomment %}
-	<h2>MediaCMS {{VERSION}}</h2>
+	<h2>cloudloop</h2>
 	<hr/>
 
-    <p><a href="https://mediacms.io">MediaCMS</a> {{ "is a modern, fully featured open source video and media CMS. It is developed to meet the needs of modern web platforms for viewing and sharing media" | custom_translate:LANGUAGE_CODE}}.</p>
+    <p> {{ "Our platform is a modern media-sharing webside build to empower creators and deliver an exceptional viewing experience. It provides a dynamic space where users can upload, share and discover media content with ease." | custom_translate:LANGUAGE_CODE}}.</p>
+	<h2> {{"Key Features:" | custom_translate:LANGUAGE_CODE}}</h2>
+	<ul>
+		<li>{{ "High-quality video hosting and fast streaming" | custom_translate:LANGUAGE_CODE}}</li>
+		<li>{{ "Support for uploading videos, images and PDFs"| custom_translate:LANGUAGE_CODE }}</li>
+		<li>{{ "Community features including creating channels, comments, tags and categories"| custom_translate:LANGUAGE_CODE }}</li>
+	</ul>
 </div>
 
 {% endblock %}
