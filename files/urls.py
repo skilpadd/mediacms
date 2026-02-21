@@ -49,7 +49,6 @@ urlpatterns = [
     re_path(r"^search", views.search, name="search"),
     re_path(r"^scpublisher", views.upload_media, name="upload_media"),
     re_path(r"^tags", views.tags, name="tags"),
-    re_path(r"^tos$", views.tos, name="terms_of_service"),
     re_path(r"^view/(?P<friendly_token>[\w_-]*)/playlist/(?P<playlist_token>[\w_-]*)$", views.view_media, name="get_media_with_playlist"),
     re_path(r"^view/(?P<friendly_token>[\w_-]*)$", views.view_media, name="get_media"),
     re_path(r"^upload", views.upload_media, name="upload_media"),

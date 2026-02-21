@@ -223,13 +223,6 @@ export function SidebarNavigationMenu() {
       className: 'nav-item-about',
     });
 
-      items.push({
-      link: '/tos',
-      icon: 'description',
-      text: translateString("Terms"),
-      className: 'nav-item-terms',
-    });
-
     items.push({
       link: '/contact',
       icon: 'alternate_email',
