@@ -15,6 +15,7 @@ MediaCMS.user = {
 		addComment: true,
 		deleteComment: {% if CAN_DELETE_COMMENTS %}true{% else %}false{% endif %},
 		editProfile: {% if CAN_EDIT %}true{% else %}false{% endif %},
+		editChannel: {% if CAN_EDIT %}true{% else %}false{% endif %},
 		deleteProfile: {% if CAN_DELETE %}true{% else %}false{% endif %},
 		canSeeMembersPage: {% if CAN_SEE_MEMBERS_PAGE %}true{% else %}false{% endif %},
 		manageMedia: {% if IS_MEDIACMS_ADMIN or IS_MEDIACMS_MANAGER or IS_MEDIACMS_EDITOR %}true{% else %}false{% endif %},

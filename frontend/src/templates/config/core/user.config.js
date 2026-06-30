@@ -21,6 +21,7 @@ module.exports = {
     addComment: true,
     deleteComment: true,
     editProfile: true,
+    editChannel: true,
     deleteProfile: true,
     manageMedia: true,
     manageUsers: true,

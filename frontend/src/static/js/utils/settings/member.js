@@ -14,6 +14,7 @@ export function init(user, features) {
       register: true,
       addMedia: false,
       editProfile: false,
+      editChannel: false,
       canSeeMembersPage: true,
       usersNeedsToBeApproved: true,
       changePassword: true,
@@ -103,6 +104,7 @@ export function init(user, features) {
     MEMBER.can.usersNeedsToBeApproved = true === user.can.usersNeedsToBeApproved;
     MEMBER.can.addMedia = true === user.can.addMedia;
     MEMBER.can.editProfile = true === user.can.editProfile;
+    MEMBER.can.editChannel = true === user.can.editChannel;
     MEMBER.can.readComment = false === user.can.readComment ? false : true;
   }
 

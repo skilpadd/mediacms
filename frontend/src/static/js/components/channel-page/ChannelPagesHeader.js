@@ -189,7 +189,7 @@ export default function ChannelPagesHeader(props) {
 
   const userIsChannelOwner = !MemberContext._currentValue.is.anonymous && props.channel?.author_name === MemberContext._currentValue.username;
   const userCanDeleteChannel = userIsChannelOwner || MemberContext._currentValue.is.admin;
-  const userCanEditChannel = userCanDeleteChannel;
+  const userCanEditChannel = userIsChannelOwner || MemberContext._currentValue.can.editChannel;
   
   function cancelChannelRemoval() {
     popupContentRef.current.toggle();

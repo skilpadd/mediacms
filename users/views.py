@@ -38,6 +38,13 @@ def get_user(username):
         return None
 
 
+def can_edit_channel(user, channel):
+    if not (channel and user.is_authenticated):
+        return False
+
+    return user == channel.user or is_mediacms_editor(user)
+
+
 def view_user(request, username):
     context = {}
     user = get_user(username=username)
@@ -149,7 +156,7 @@ def view_channel(request, friendly_token):
     user = channel.user
     context["channel"] = channel
     context["user"] = user
-    context["CAN_EDIT"] = True if ((user and user == request.user) or is_mediacms_manager(request.user)) else False
+    context["CAN_EDIT"] = can_edit_channel(request.user, channel)
     return render(request, "cms/channel.html", context)
 
 
@@ -184,7 +191,7 @@ def create_channel(request):
 @login_required
 def edit_channel(request, friendly_token):
     channel = Channel.objects.filter(friendly_token=friendly_token).first()
-    if not (channel and request.user.is_authenticated and (request.user == channel.user)):
+    if not can_edit_channel(request.user, channel):
         return HttpResponseRedirect("/")
 
     if request.method == "POST":
@@ -207,7 +214,7 @@ def edit_channel(request, friendly_token):
                             tag = Tag.objects.create(title=tag, user=request.user)
                         if tag not in channel.tags.all():
                             channel.tags.add(tag)
-            return HttpResponseRedirect(request.user.get_absolute_url())
+            return HttpResponseRedirect(channel.get_absolute_url())
     else:
         form = ChannelForm(instance=channel)
     return render(request, "cms/channel_edit.html", {"form": form})
@@ -222,7 +229,7 @@ def view_channel_about(request, friendly_token):
     user = channel.user
     context["channel"] = channel
     context["user"] = user
-    context["CAN_EDIT"] = True if ((user and user == request.user) or is_mediacms_manager(request.user)) else False
+    context["CAN_EDIT"] = can_edit_channel(request.user, channel)
     return render(request, "cms/channel_about.html", context)
 
 
